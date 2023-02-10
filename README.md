@@ -10,5 +10,11 @@ book store(toy project)
 - H2
 - Junit5
 
-# ?
-### 1. Service와 ServiceImpl
+### 22/2/11
+- Spring, JPA 기본설정
+- 책 판매 등록 api 구현
+- 등록한 책 수정 api 구현
+- 도메인, Dto 테스트 코드 구현
+- Service와 ServiceImpl를 계속 이대로 써야할까?
+- DTO 관리
+  
