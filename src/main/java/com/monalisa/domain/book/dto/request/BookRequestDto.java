@@ -1,14 +1,13 @@
 package com.monalisa.domain.book.dto.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Lob;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookRequestDto {
 
     @Getter

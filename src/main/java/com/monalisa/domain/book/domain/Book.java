@@ -37,7 +37,7 @@ public class Book {
     @Column(name = "isSold")
     private boolean isSold;
 
-    public Book(final BookRequestDto.Add addBookRequestDto, final User user) {
+    private Book(final BookRequestDto.Add addBookRequestDto, final User user) {
         this.name = addBookRequestDto.getName();
         this.desc = addBookRequestDto.getDesc();
         this.author = addBookRequestDto.getAuthor();

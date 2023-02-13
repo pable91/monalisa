@@ -26,9 +26,9 @@ public class BookUpdateService {
     private final UserRepository userRepository;
 
     public Book addBookService(final BookRequestDto.Add addBookRequestDto) {
-        User findUser = validate(addBookRequestDto);
+        final User findUser = validate(addBookRequestDto);
 
-        Book newBook = Book.of(addBookRequestDto, findUser);
+        final Book newBook = Book.of(addBookRequestDto, findUser);
 
         return bookRepository.save(newBook);
     }
@@ -56,7 +56,7 @@ public class BookUpdateService {
             throw new BookNotFoundException(ErrorCode.BOOK_NOT_FOUND, updateBookRequestDto.getBookId());
         }
 
-        Book findBook = book.get();
+        final Book findBook = book.get();
         if(!findBook.isMine(updateBookRequestDto.getUserId())) {
             throw new IsNotMyBookException(ErrorCode.IS_NOT_MY_BOOK, updateBookRequestDto.getBookId());
         }

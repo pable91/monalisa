@@ -3,27 +3,29 @@ package com.monalisa.global.error;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class ErrorResponse {
 
-    private String message;
-    private int status;
-    private List<FieldErrorValue> errors;
-    private String code;
+    private final String message;
+    private final int status;
+    private final List<FieldErrorValue> errors;
+    private final String code;
 
     @Getter
     private static class FieldErrorValue {
-        private String field;
-        private Object value;
-        private String reason;
+        private final String field;
+        private final Object value;
+        private final String reason;
 
         private FieldErrorValue(FieldError fieldError) {
             this.field = fieldError.getField();
@@ -39,11 +41,11 @@ public class ErrorResponse {
     private ErrorResponse(final ErrorCode errorCode, final List<FieldErrorValue> errors) {
         this.message = errorCode.getMessage();
         this.status = errorCode.getStatus();
-        this.errors = errors;
+        this.errors = new ArrayList<>(errors);
         this.code = errorCode.getCode();
     }
 
-    public ErrorResponse(final ErrorCode errorCode) {
+    private ErrorResponse(final ErrorCode errorCode) {
         this.message = errorCode.getMessage();
         this.status = errorCode.getStatus();
         this.errors = Collections.emptyList();
@@ -51,7 +53,7 @@ public class ErrorResponse {
     }
 
     public static ErrorResponse of(final ErrorCode errorCode, final BindingResult bindingResult) {
-        List<FieldErrorValue> tmpErrors = createFieldErrorValueList(bindingResult);
+        final List<FieldErrorValue> tmpErrors = createFieldErrorValueList(bindingResult);
         return new ErrorResponse(errorCode, tmpErrors);
     }
 
@@ -60,7 +62,7 @@ public class ErrorResponse {
     }
 
     private static List<FieldErrorValue> createFieldErrorValueList(BindingResult bindingResult) {
-        List<FieldErrorValue> tmpErrors = bindingResult.getFieldErrors().stream()
+        final List<FieldErrorValue> tmpErrors = bindingResult.getFieldErrors().stream()
                 .map(fieldError -> FieldErrorValue.of(fieldError))
                 .collect(Collectors.toList());
         return tmpErrors;

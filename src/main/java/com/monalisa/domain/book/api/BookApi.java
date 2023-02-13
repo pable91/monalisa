@@ -2,8 +2,8 @@ package com.monalisa.domain.book.api;
 
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
-import com.monalisa.domain.book.dto.response.UpdateBookResponseDto;
 import com.monalisa.domain.book.dto.response.AddBookResponseDto;
+import com.monalisa.domain.book.dto.response.UpdateBookResponseDto;
 import com.monalisa.domain.book.service.BookUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class BookApi {
     private ResponseEntity<AddBookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto) {
         System.out.println(addBookRequestDto.toString());
 
-        Book book = bookUpdateService.addBookService(addBookRequestDto);
+        final Book book = bookUpdateService.addBookService(addBookRequestDto);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -34,7 +34,7 @@ public class BookApi {
     private ResponseEntity updateBook(@RequestBody @Valid final BookRequestDto.Update updateBookRequestDto) {
         System.out.println(updateBookRequestDto.toString());
 
-        Book book = bookUpdateService.updateBookService(updateBookRequestDto);
+        final Book book = bookUpdateService.updateBookService(updateBookRequestDto);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
