@@ -1,10 +1,15 @@
 package com.monalisa.domain.book.service;
 
 import com.monalisa.domain.book.dto.request.BookRequestDto;
+import com.monalisa.domain.book.exception.BookAlreadyRegisterException;
+import com.monalisa.domain.book.exception.BookNotFoundException;
+import com.monalisa.domain.book.exception.IsNotMyBookException;
+import com.monalisa.domain.member.exception.UserNotFoundException;
 import com.monalisa.domain.book.repository.BookRepository;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.repository.UserRepository;
 import com.monalisa.domain.member.domain.User;
+import com.monalisa.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,14 +37,14 @@ public class BookUpdateService {
         Optional<User> user = userRepository.findById(addBookRequestDto.getUserId());
 
         if(!user.isPresent()) {
-            throw new RuntimeException("사용자가 존재하지않음");
+            throw new UserNotFoundException(addBookRequestDto.getUserId(), ErrorCode.USER_NOT_FOUND);
         }
 
         User findUser = user.get();
 
         Optional<Book> findBook = bookRepository.findByNameAndUser(addBookRequestDto.getName(), findUser);
         if(findBook.isPresent()) {
-            throw new RuntimeException("해당 사용자가 이미 책을 판매 등록했습니다");
+            throw new BookAlreadyRegisterException(ErrorCode.BOOK_ALREADY_REGISTER, addBookRequestDto.getName());
         }
 
         return findUser;
@@ -48,12 +53,12 @@ public class BookUpdateService {
     public Book updateBookService(final BookRequestDto.Update updateBookRequestDto) {
         Optional<Book> book = bookRepository.findById(updateBookRequestDto.getBookId());
         if(!book.isPresent()) {
-            throw new RuntimeException("수정할 책이 존재하지 않습니다");
+            throw new BookNotFoundException(ErrorCode.BOOK_NOT_FOUND, updateBookRequestDto.getBookId());
         }
 
         Book findBook = book.get();
         if(!findBook.isMine(updateBookRequestDto.getUserId())) {
-            throw new RuntimeException("내가 판매 등록한 책이 아닙니다");
+            throw new IsNotMyBookException(ErrorCode.IS_NOT_MY_BOOK, updateBookRequestDto.getBookId());
         }
 
         findBook.update(updateBookRequestDto);
