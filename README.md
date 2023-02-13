@@ -37,6 +37,6 @@ book store(toy project)
 ### 22/2/13
 - @ControllerAdvice 로 전역 에러 핸들링
 - ErrorResponse 응답 객체 구현
-- 사용자 정의(BusinessException, InvalidValueException, EntityNotFoundException) 구현
+- 사용자 정의(BusinessException, InvalidValueException, EntityNotFoundException) Exception 구현
 - ErrorCode 구현
   
