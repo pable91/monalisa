@@ -1,6 +1,6 @@
 package com.monalisa.domain.book.exception;
 
-import com.monalisa.global.error.ErrorCode;
+import com.monalisa.global.error.errorcode.ErrorCode;
 import com.monalisa.global.error.exception.InvalidValueException;
 
 public class BookAlreadyRegisterException extends InvalidValueException {

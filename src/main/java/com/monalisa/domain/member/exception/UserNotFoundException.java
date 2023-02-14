@@ -1,6 +1,6 @@
 package com.monalisa.domain.member.exception;
 
-import com.monalisa.global.error.ErrorCode;
+import com.monalisa.global.error.errorcode.ErrorCode;
 import com.monalisa.global.error.exception.EntityNotFoundException;
 
 public class UserNotFoundException extends EntityNotFoundException {

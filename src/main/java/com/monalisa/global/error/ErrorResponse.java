@@ -1,8 +1,7 @@
 package com.monalisa.global.error;
 
-import lombok.AccessLevel;
+import com.monalisa.global.error.errorcode.ErrorCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
