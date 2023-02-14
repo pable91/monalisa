@@ -39,5 +39,5 @@ book store(toy project)
 - ErrorResponse 응답 객체 구현
 - 사용자 정의(BusinessException, InvalidValueException, EntityNotFoundException) Exception 구현
 - ErrorCode 구현
-- [예외 핸들링 및 응답 객체 리팩토링](https://github.com/pable91/TIL/edit/main/%EC%A0%84%EC%97%AD%20%EC%98%88%EC%99%B8%20%EC%B2%98%EB%A6%AC%20%ED%95%B8%EB%93%A4%EB%A7%81%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
+- [예외 핸들링 및 응답 객체 리팩토링](https://github.com/pable91/TIL/blob/main/%EC%98%88%EC%99%B8%20%ED%95%B8%EB%93%A4%EB%A7%81%20%EB%B0%8F%20%EC%9D%91%EB%8B%B5%20%EA%B0%9D%EC%B2%B4%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
 - [ErrorCode 리팩토링](https://github.com/pable91/TIL/blob/main/ErrorCode%20%EC%B6%94%EC%83%81%ED%99%94%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
