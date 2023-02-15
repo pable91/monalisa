@@ -11,6 +11,7 @@ import com.monalisa.domain.member.domain.User;
 import com.monalisa.domain.member.dto.AddMemberRequestDto;
 import com.monalisa.domain.member.exception.UserNotFoundException;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,18 +36,18 @@ class BookUpdateServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Test
-    @DisplayName("판매할 책 등록  테스트")
-    public void addBookTest() {
-        // give
+    private User user;
+    private BookRequestDto.Add addBookRequestDto;
+    private BookRequestDto.Update updateBookRequestDto;
+
+    @BeforeEach
+    public void init() {
         AddMemberRequestDto addMemberRequestDto = AddMemberRequestDto.builder()
                 .name("kim")
                 .build();
-        User newUser = User.from(1L, addMemberRequestDto.getName());
+        user = User.from(1L, addMemberRequestDto.getName());
 
-        when(userRepository.findById(any())).thenReturn(Optional.of(newUser));
-
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
+        addBookRequestDto = BookRequestDto.Add.builder()
                 .name("kim")
                 .desc("desc")
                 .cost(1000)
@@ -54,7 +55,23 @@ class BookUpdateServiceTest {
                 .userId(1L)
                 .build();
 
-        when(bookRepository.save(any(Book.class))).thenReturn(Book.of(addBookRequestDto, newUser));
+        updateBookRequestDto = BookRequestDto.Update.builder()
+                .userId(1L)
+                .bookId(1L)
+                .name("update name")
+                .desc("update desc")
+                .cost(10000000)
+                .author("update author")
+                .build();
+    }
+
+    @Test
+    @DisplayName("판매할 책 등록  테스트")
+    public void addBookTest() {
+        // give
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+
+        when(bookRepository.save(any(Book.class))).thenReturn(Book.of(addBookRequestDto, user));
 //        doReturn(Book.of(addBookRequestDto, newUser)).when(bookRepository)
 //                .save(any(Book.class));
 
@@ -62,7 +79,7 @@ class BookUpdateServiceTest {
         Book book = bookUpdateService.addBookService(addBookRequestDto);
 
         // then
-        Assertions.assertThat(book.getUser()).isEqualTo(newUser);
+        Assertions.assertThat(book.getUser()).isEqualTo(user);
         Assertions.assertThat(book.getName()).isEqualTo("kim");
         Assertions.assertThat(book.getDesc()).isEqualTo("desc");
         Assertions.assertThat(book.getCost()).isEqualTo(1000);
@@ -73,14 +90,6 @@ class BookUpdateServiceTest {
     @DisplayName("판매 책을 등록할때 유저가 없으면 예외를 던진다")
     public void userNotFoundExceptionTest() {
         // give
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
-                .name("kim")
-                .desc("desc")
-                .cost(1000)
-                .author("author")
-                .userId(1L)
-                .build();
-
         when(userRepository.findById(any())).thenReturn(Optional.empty());
 
         // when, then
@@ -93,21 +102,9 @@ class BookUpdateServiceTest {
     @DisplayName("판매 책을 등록할때 이미 등록된 책이면 예외를 던진다")
     public void bookAlreadyRegisterExceptionTest() {
         // give
-        AddMemberRequestDto addMemberRequestDto = AddMemberRequestDto.builder()
-                .name("kim")
-                .build();
-        User newUser = User.from(1L, addMemberRequestDto.getName());
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        when(userRepository.findById(any())).thenReturn(Optional.of(newUser));
-
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
-                .name("kim")
-                .desc("desc")
-                .cost(1000)
-                .author("author")
-                .userId(1L)
-                .build();
-        Book book = Book.of(addBookRequestDto, newUser);
+        Book book = Book.of(addBookRequestDto, user);
 
         when(bookRepository.findByNameAndUser(any(), any())).thenReturn(Optional.of(book));
 
@@ -121,36 +118,15 @@ class BookUpdateServiceTest {
     @DisplayName("판매 등록 책 업데이트 테스트")
     public void updateBookTest() {
         // give
-        AddMemberRequestDto addMemberRequestDto = AddMemberRequestDto.builder()
-                .name("kim")
-                .build();
-        User newUser = User.from(1L, addMemberRequestDto.getName());
-
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
-                .name("kim")
-                .desc("desc")
-                .cost(1000)
-                .author("author")
-                .userId(1L)
-                .build();
-        Book book = Book.of(addBookRequestDto, newUser);
+        Book book = Book.of(addBookRequestDto, user);
 
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
-
-        BookRequestDto.Update updateBookRequestDto = BookRequestDto.Update.builder()
-                .userId(1L)
-                .bookId(1L)
-                .name("update name")
-                .desc("update desc")
-                .cost(10000000)
-                .author("update author")
-                .build();
 
         // when
         Book updateBook = bookUpdateService.updateBookService(updateBookRequestDto);
 
         // then
-        Assertions.assertThat(updateBook.getUser()).isEqualTo(newUser);
+        Assertions.assertThat(updateBook.getUser()).isEqualTo(user);
         Assertions.assertThat(updateBook.getName()).isEqualTo("update name");
         Assertions.assertThat(updateBook.getDesc()).isEqualTo("update desc");
         Assertions.assertThat(updateBook.getCost()).isEqualTo(10000000);
@@ -162,15 +138,7 @@ class BookUpdateServiceTest {
     @Test
     @DisplayName("책 수정하려고 할때 책이 존재하지 않으면 예외를 던진다")
     public void bookNotFoundExceptionTest() {
-        BookRequestDto.Update updateBookRequestDto = BookRequestDto.Update.builder()
-                .userId(1L)
-                .bookId(1L)
-                .name("update name")
-                .desc("update desc")
-                .cost(10000000)
-                .author("update author")
-                .build();
-
+        // give
         when(bookRepository.findById(any())).thenReturn(Optional.empty());
 
         // when, then
@@ -182,21 +150,10 @@ class BookUpdateServiceTest {
     @Test
     @DisplayName("수정하려는 책이 내 책이 아니면 예외를 던진다")
     public void bookIsNotMyBook() {
-        AddMemberRequestDto addMemberRequestDto = AddMemberRequestDto.builder()
-                .name("kim")
-                .build();
-        User newUser = User.from(1L, addMemberRequestDto.getName());
+        // give
+        Book book = Book.of(addBookRequestDto, user);
 
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
-                .name("kim")
-                .desc("desc")
-                .cost(1000)
-                .author("author")
-                .userId(1L)
-                .build();
-        Book book = Book.of(addBookRequestDto, newUser);
-
-        BookRequestDto.Update updateBookRequestDto = BookRequestDto.Update.builder()
+        BookRequestDto.Update notEqualUserIdUpdateDto = BookRequestDto.Update.builder()
                 .userId(2L)
                 .bookId(1L)
                 .name("update name")
@@ -209,7 +166,7 @@ class BookUpdateServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(IsNotMyBookException.class, () -> {
-            bookUpdateService.updateBookService(updateBookRequestDto);
+            bookUpdateService.updateBookService(notEqualUserIdUpdateDto);
         });
 
     }
