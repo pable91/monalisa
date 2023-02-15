@@ -168,6 +168,36 @@ class BookUpdateServiceTest {
         org.junit.jupiter.api.Assertions.assertThrows(IsNotMyBookException.class, () -> {
             bookUpdateService.updateBookService(notEqualUserIdUpdateDto);
         });
+    }
 
+    @Test
+    @DisplayName("판매 등록된 책을 삭제하는 테스트")
+    public void deleteBookTest() {
+        // give
+        Book book = Book.of(addBookRequestDto, user);
+
+        when(bookRepository.findById(any())).thenReturn(Optional.of(book));
+
+        // when
+        Book deleteBook = bookUpdateService.deleteBookService(book.getId());
+
+        // then
+        Assertions.assertThat(deleteBook.getUser()).isEqualTo(user);
+        Assertions.assertThat(deleteBook.getName()).isEqualTo("kim");
+        Assertions.assertThat(deleteBook.getDesc()).isEqualTo("desc");
+        Assertions.assertThat(deleteBook.getCost()).isEqualTo(1000);
+        Assertions.assertThat(deleteBook.getAuthor()).isEqualTo("author");
+    }
+
+    @Test
+    @DisplayName("등록된 책을 삭째할때 해당 책은 존재하지않으면 예외를 던진다")
+    public void bookNotFoundExceptionTestByDelete() {
+        // give
+        when(bookRepository.findById(any())).thenReturn(Optional.empty());
+
+        // when, then
+        org.junit.jupiter.api.Assertions.assertThrows(BookNotFoundException.class, () -> {
+            bookUpdateService.deleteBookService(1L);
+        });
     }
 }

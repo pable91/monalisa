@@ -35,8 +35,9 @@ public class BookUpdateService {
     }
 
     private User validate(final BookRequestDto.Add addBookRequestDto) {
+        // TODO
+        // 나중에 로그인 기능이 있다면 굳이 필요할까?
         Optional<User> user = userRepository.findById(addBookRequestDto.getUserId());
-
         if(!user.isPresent()) {
             throw new UserNotFoundException(addBookRequestDto.getUserId(), UserErrorCode.USER_NOT_FOUND);
         }
@@ -63,6 +64,18 @@ public class BookUpdateService {
         }
 
         findBook.update(updateBookRequestDto);
+
+        return findBook;
+    }
+
+    public Book deleteBookService(final Long bookId) {
+        Optional<Book> book = bookRepository.findById(bookId);
+        if(!book.isPresent()) {
+            throw new BookNotFoundException(BookErrorCode.BOOK_NOT_FOUND, bookId);
+        }
+
+        final Book findBook = book.get();
+        bookRepository.delete(findBook);
 
         return findBook;
     }

@@ -1,5 +1,6 @@
 package com.monalisa.domain.book.dto.request;
 
+import com.monalisa.domain.book.domain.Book;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -28,6 +29,8 @@ public class BookRequestDto {
         @NotBlank
         private String author;
 
+        // TODO
+        // 나중에 로그인 기능이 있다면 굳이 필요할까?
         @Min(1)
         private Long userId;
     }
@@ -35,7 +38,7 @@ public class BookRequestDto {
     @Getter
     @Builder
     @ToString
-    public static class Update{
+    public static class Update {
 
         @NotBlank
         private String name;
@@ -56,5 +59,6 @@ public class BookRequestDto {
         @Min(1)
         private Long bookId;
     }
+
 
 }
