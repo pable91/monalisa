@@ -1,6 +1,5 @@
 package com.monalisa.domain.book.dto.request;
 
-import com.monalisa.domain.book.domain.Book;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -59,6 +58,4 @@ public class BookRequestDto {
         @Min(1)
         private Long bookId;
     }
-
-
 }

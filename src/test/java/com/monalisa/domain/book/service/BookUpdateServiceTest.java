@@ -2,6 +2,7 @@ package com.monalisa.domain.book.service;
 
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
+import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.book.exception.BookAlreadyRegisterException;
 import com.monalisa.domain.book.exception.BookNotFoundException;
 import com.monalisa.domain.book.exception.IsNotMyBookException;
@@ -76,14 +77,13 @@ class BookUpdateServiceTest {
 //                .save(any(Book.class));
 
         // when
-        Book book = bookUpdateService.addBookService(addBookRequestDto);
+        BookResponseDto bookResponseDto = bookUpdateService.addBookService(addBookRequestDto);
 
         // then
-        Assertions.assertThat(book.getUser()).isEqualTo(user);
-        Assertions.assertThat(book.getName()).isEqualTo("kim");
-        Assertions.assertThat(book.getDesc()).isEqualTo("desc");
-        Assertions.assertThat(book.getCost()).isEqualTo(1000);
-        Assertions.assertThat(book.getAuthor()).isEqualTo("author");
+        Assertions.assertThat(bookResponseDto.getName()).isEqualTo("kim");
+        Assertions.assertThat(bookResponseDto.getDesc()).isEqualTo("desc");
+        Assertions.assertThat(bookResponseDto.getCost()).isEqualTo(1000);
+        Assertions.assertThat(bookResponseDto.getAuthor()).isEqualTo("author");
     }
 
     @Test
@@ -123,16 +123,14 @@ class BookUpdateServiceTest {
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
 
         // when
-        Book updateBook = bookUpdateService.updateBookService(updateBookRequestDto);
+        BookResponseDto bookResponseDto = bookUpdateService.updateBookService(updateBookRequestDto);
 
         // then
-        Assertions.assertThat(updateBook.getUser()).isEqualTo(user);
-        Assertions.assertThat(updateBook.getName()).isEqualTo("update name");
-        Assertions.assertThat(updateBook.getDesc()).isEqualTo("update desc");
-        Assertions.assertThat(updateBook.getCost()).isEqualTo(10000000);
-        Assertions.assertThat(updateBook.getAuthor()).isEqualTo("update author");
+        Assertions.assertThat(bookResponseDto.getName()).isEqualTo("update name");
+        Assertions.assertThat(bookResponseDto.getDesc()).isEqualTo("update desc");
+        Assertions.assertThat(bookResponseDto.getCost()).isEqualTo(10000000);
+        Assertions.assertThat(bookResponseDto.getAuthor()).isEqualTo("update author");
     }
-
 
 
     @Test
@@ -179,14 +177,13 @@ class BookUpdateServiceTest {
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
 
         // when
-        Book deleteBook = bookUpdateService.deleteBookService(book.getId());
+        BookResponseDto bookResponseDto = bookUpdateService.deleteBookService(book.getId());
 
         // then
-        Assertions.assertThat(deleteBook.getUser()).isEqualTo(user);
-        Assertions.assertThat(deleteBook.getName()).isEqualTo("kim");
-        Assertions.assertThat(deleteBook.getDesc()).isEqualTo("desc");
-        Assertions.assertThat(deleteBook.getCost()).isEqualTo(1000);
-        Assertions.assertThat(deleteBook.getAuthor()).isEqualTo("author");
+        Assertions.assertThat(bookResponseDto.getName()).isEqualTo("kim");
+        Assertions.assertThat(bookResponseDto.getDesc()).isEqualTo("desc");
+        Assertions.assertThat(bookResponseDto.getCost()).isEqualTo(1000);
+        Assertions.assertThat(bookResponseDto.getAuthor()).isEqualTo("author");
     }
 
     @Test

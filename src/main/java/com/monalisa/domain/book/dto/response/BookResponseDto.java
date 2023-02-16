@@ -2,17 +2,13 @@ package com.monalisa.domain.book.dto.response;
 
 import com.monalisa.domain.book.domain.Book;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Length;
-
-import javax.persistence.Lob;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @AllArgsConstructor
 public class BookResponseDto {
+    private String userName;
+
     private String name;
 
     private String desc;
@@ -24,6 +20,7 @@ public class BookResponseDto {
     private Long bookId;
 
     private BookResponseDto(Book book) {
+        this.userName = book.getUser().getName();
         this.name = book.getName();
         this.desc = book.getDesc();
         this.cost = book.getCost();
