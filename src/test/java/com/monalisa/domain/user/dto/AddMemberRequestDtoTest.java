@@ -1,4 +1,4 @@
-package com.monalisa.domain.member.dto;
+package com.monalisa.domain.user.dto;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,11 +29,11 @@ class AddMemberRequestDtoTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        AddMemberRequestDto addMemberRequestDto = AddMemberRequestDto.builder()
+        UserRequestDto userRequestDto = UserRequestDto.builder()
                 .name(name)
                 .build();
 
-        Set<ConstraintViolation<AddMemberRequestDto>> violations = validator.validate(addMemberRequestDto);
+        Set<ConstraintViolation<UserRequestDto>> violations = validator.validate(userRequestDto);
         Assertions.assertThat(violations.size()).isEqualTo(invalidCnt);
     }
 }

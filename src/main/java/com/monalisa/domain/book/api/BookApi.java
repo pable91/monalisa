@@ -2,6 +2,7 @@ package com.monalisa.domain.book.api;
 
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
+import com.monalisa.domain.book.service.BookFindService;
 import com.monalisa.domain.book.service.BookUpdateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,10 @@ import javax.validation.Valid;
 public class BookApi {
 
     private final BookUpdateService bookUpdateService;
+    private final BookFindService bookFindService;
 
     @PostMapping("/add")
-    private ResponseEntity<BookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto) {
+    public ResponseEntity<BookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto) {
         System.out.println(addBookRequestDto.toString());
 
         final BookResponseDto bookResponseDto = bookUpdateService.addBookService(addBookRequestDto);
@@ -29,7 +31,7 @@ public class BookApi {
     }
 
     @PutMapping("/update")
-    private ResponseEntity<BookResponseDto> updateBook(@RequestBody @Valid final BookRequestDto.Update updateBookRequestDto) {
+    public ResponseEntity<BookResponseDto> updateBook(@RequestBody @Valid final BookRequestDto.Update updateBookRequestDto) {
         System.out.println(updateBookRequestDto.toString());
 
         final BookResponseDto bookResponseDto = bookUpdateService.updateBookService(updateBookRequestDto);
@@ -40,11 +42,18 @@ public class BookApi {
     }
 
     @DeleteMapping("/delete/{bookId}")
-    private ResponseEntity<BookResponseDto> deleteBook(@PathVariable final Long bookId) {
+    public ResponseEntity<BookResponseDto> deleteBook(@PathVariable final Long bookId) {
         final BookResponseDto bookResponseDto = bookUpdateService.deleteBookService(bookId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(bookResponseDto);
+    }
+
+    @GetMapping("/{bookId}")
+    public ResponseEntity<BookResponseDto> findBookById(@PathVariable final Long bookId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookFindService.findById(bookId));
     }
 }

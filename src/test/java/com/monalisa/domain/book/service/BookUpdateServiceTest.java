@@ -8,9 +8,9 @@ import com.monalisa.domain.book.exception.BookNotFoundException;
 import com.monalisa.domain.book.exception.IsNotMyBookException;
 import com.monalisa.domain.book.repository.BookRepository;
 import com.monalisa.domain.book.repository.UserRepository;
-import com.monalisa.domain.member.domain.User;
-import com.monalisa.domain.member.dto.AddMemberRequestDto;
-import com.monalisa.domain.member.exception.UserNotFoundException;
+import com.monalisa.domain.user.domain.User;
+import com.monalisa.domain.user.dto.UserRequestDto;
+import com.monalisa.domain.user.exception.UserNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,10 +43,10 @@ class BookUpdateServiceTest {
 
     @BeforeEach
     public void init() {
-        AddMemberRequestDto addMemberRequestDto = AddMemberRequestDto.builder()
+        UserRequestDto userRequestDto = UserRequestDto.builder()
                 .name("kim")
                 .build();
-        user = User.from(1L, addMemberRequestDto.getName());
+        user = User.from(1L, userRequestDto.getName());
 
         addBookRequestDto = BookRequestDto.Add.builder()
                 .name("kim")
@@ -72,7 +72,7 @@ class BookUpdateServiceTest {
         // give
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        when(bookRepository.save(any(Book.class))).thenReturn(Book.of(addBookRequestDto, user));
+        when(bookRepository.save(any(Book.class))).thenReturn(Book.registerBook(addBookRequestDto, user));
 //        doReturn(Book.of(addBookRequestDto, newUser)).when(bookRepository)
 //                .save(any(Book.class));
 
@@ -104,7 +104,7 @@ class BookUpdateServiceTest {
         // give
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
 
-        Book book = Book.of(addBookRequestDto, user);
+        Book book = Book.registerBook(addBookRequestDto, user);
 
         when(bookRepository.findByNameAndUser(any(), any())).thenReturn(Optional.of(book));
 
@@ -118,7 +118,7 @@ class BookUpdateServiceTest {
     @DisplayName("판매 등록 책 업데이트 테스트")
     public void updateBookTest() {
         // give
-        Book book = Book.of(addBookRequestDto, user);
+        Book book = Book.registerBook(addBookRequestDto, user);
 
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
 
@@ -149,7 +149,7 @@ class BookUpdateServiceTest {
     @DisplayName("수정하려는 책이 내 책이 아니면 예외를 던진다")
     public void bookIsNotMyBook() {
         // give
-        Book book = Book.of(addBookRequestDto, user);
+        Book book = Book.registerBook(addBookRequestDto, user);
 
         BookRequestDto.Update notEqualUserIdUpdateDto = BookRequestDto.Update.builder()
                 .userId(2L)
@@ -172,7 +172,7 @@ class BookUpdateServiceTest {
     @DisplayName("판매 등록된 책을 삭제하는 테스트")
     public void deleteBookTest() {
         // give
-        Book book = Book.of(addBookRequestDto, user);
+        Book book = Book.registerBook(addBookRequestDto, user);
 
         when(bookRepository.findById(any())).thenReturn(Optional.of(book));
 

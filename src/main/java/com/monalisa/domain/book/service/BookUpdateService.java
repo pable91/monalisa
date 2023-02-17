@@ -9,9 +9,9 @@ import com.monalisa.domain.book.exception.IsNotMyBookException;
 import com.monalisa.domain.book.exception.error.BookErrorCode;
 import com.monalisa.domain.book.repository.BookRepository;
 import com.monalisa.domain.book.repository.UserRepository;
-import com.monalisa.domain.member.domain.User;
-import com.monalisa.domain.member.exception.UserNotFoundException;
-import com.monalisa.domain.member.exception.error.UserErrorCode;
+import com.monalisa.domain.user.domain.User;
+import com.monalisa.domain.user.exception.UserNotFoundException;
+import com.monalisa.domain.user.exception.error.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class BookUpdateService {
     public BookResponseDto addBookService(final BookRequestDto.Add addBookRequestDto) {
         final User findUser = validate(addBookRequestDto);
 
-        final Book newBook = Book.of(addBookRequestDto, findUser);
+        final Book newBook = Book.registerBook(addBookRequestDto, findUser);
 
         return BookResponseDto.of(bookRepository.save(newBook));
     }

@@ -17,15 +17,12 @@ public class BookResponseDto {
 
     private String author;
 
-    private Long bookId;
-
     private BookResponseDto(Book book) {
         this.userName = book.getUser().getName();
         this.name = book.getName();
         this.desc = book.getDesc();
         this.cost = book.getCost();
         this.author = book.getAuthor();
-        this.bookId = book.getId();
     }
 
     public static BookResponseDto of(Book book) {

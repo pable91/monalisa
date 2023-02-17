@@ -1,4 +1,4 @@
-package com.monalisa.domain.member.exception.error;
+package com.monalisa.domain.user.exception.error;
 
 import com.monalisa.global.error.errorcode.ErrorCode;
 import lombok.Getter;

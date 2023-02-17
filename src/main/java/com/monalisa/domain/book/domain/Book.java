@@ -1,7 +1,7 @@
 package com.monalisa.domain.book.domain;
 
 import com.monalisa.domain.book.dto.request.BookRequestDto;
-import com.monalisa.domain.member.domain.User;
+import com.monalisa.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,9 +44,11 @@ public class Book {
         this.cost = addBookRequestDto.getCost();
         this.user = user;
         this.isSold = false;
+
+        user.getBookList().add(this);
     }
 
-    public static Book of(final BookRequestDto.Add addBookRequestDto, final User user) {
+    public static Book registerBook(final BookRequestDto.Add addBookRequestDto, final User user) {
         return new Book(addBookRequestDto, user);
     }
 

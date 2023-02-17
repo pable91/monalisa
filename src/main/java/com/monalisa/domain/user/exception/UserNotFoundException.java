@@ -1,4 +1,4 @@
-package com.monalisa.domain.member.exception;
+package com.monalisa.domain.user.exception;
 
 import com.monalisa.global.error.errorcode.ErrorCode;
 import com.monalisa.global.error.exception.EntityNotFoundException;

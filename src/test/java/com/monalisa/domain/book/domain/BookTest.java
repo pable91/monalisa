@@ -1,7 +1,7 @@
 package com.monalisa.domain.book.domain;
 
 import com.monalisa.domain.book.dto.request.BookRequestDto;
-import com.monalisa.domain.member.domain.User;
+import com.monalisa.domain.user.domain.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class BookTest {
 
         User user = User.from(1L, "kim");
 
-        newBook = Book.of(addBookRequestDto, user);
+        newBook = Book.registerBook(addBookRequestDto, user);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.monalisa.domain.member.dto;
+package com.monalisa.domain.user.dto;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class AddMemberRequestDto {
+public class UserRequestDto {
 
     @NotBlank
     private String name;

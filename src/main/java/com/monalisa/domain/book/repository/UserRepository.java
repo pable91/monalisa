@@ -1,6 +1,6 @@
 package com.monalisa.domain.book.repository;
 
-import com.monalisa.domain.member.domain.User;
+import com.monalisa.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
