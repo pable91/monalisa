@@ -47,3 +47,7 @@ book store(toy project)
 - Service 예외 처리 테스트 코드 
 - 책 삭제 api 구현
 - [JPA 프록시 객체 json 반환 문제](https://github.com/pable91/TIL/blob/main/JPA%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%EA%B0%9D%EC%B2%B4%20json%20%EB%B0%98%ED%99%98%20%EB%AC%B8%EC%A0%9C.md)
+
+### 22/2/17
+- 책 조회 기능 및 서비스 테스트 코드
+- 유저 조회 기능 및 서비스 테스트 코드
