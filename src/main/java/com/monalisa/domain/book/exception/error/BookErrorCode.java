@@ -10,7 +10,9 @@ public enum BookErrorCode implements ErrorCode {
 
     BOOK_NOT_FOUND(400, "B001", "Book Not Found!"),
     BOOK_ALREADY_REGISTER(400, "B002", "Book Already Register!"),
-    IS_NOT_MY_BOOK(400, "B003", "Is Not My Book!");
+    IS_NOT_MY_BOOK(400, "B003", "Is Not My Book!"),
+    BUY_NOT_MY_BOOK(400, "B004", "Buy Not My Book!"),
+    BOOK_ALREADY_SOLD(400, "B005", "Already Sold Book!");
 
     private final int status;
     private final String code;

@@ -3,7 +3,7 @@ package com.monalisa.domain.book.service;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
-import com.monalisa.domain.book.exception.BookNotFoundException;
+import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.repository.BookRepository;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
@@ -74,7 +74,7 @@ public class BookFindServiceTest {
         when(bookRepository.findById(any())).thenReturn(Optional.empty());
 
         // when, then
-        org.junit.jupiter.api.Assertions.assertThrows(BookNotFoundException.class, () -> {
+        org.junit.jupiter.api.Assertions.assertThrows(NotFoundBookException.class, () -> {
             bookFindService.findById(1L);
         });
     }

@@ -1,6 +1,7 @@
 package com.monalisa.domain.book.domain;
 
 import com.monalisa.domain.book.dto.request.BookRequestDto;
+import com.monalisa.domain.order.domain.Order;
 import com.monalisa.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,12 +31,16 @@ public class Book {
     @Column(name = "author", nullable = false)
     private String author;
 
+    @Column(name = "isSold")
+    private boolean isSold;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private User user;
 
-    @Column(name = "isSold")
-    private boolean isSold;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     private Book(final BookRequestDto.Add addBookRequestDto, final User user) {
         this.name = addBookRequestDto.getName();
@@ -61,5 +66,15 @@ public class Book {
         this.desc = updateBookRequestDto.getDesc();
         this.author = updateBookRequestDto.getAuthor();
         this.cost = updateBookRequestDto.getCost();
+    }
+
+    public boolean isSold() { return isSold; }
+
+    public void setBuyState() { isSold = true; }
+
+    public void setOrder(Order order) {
+        if(this.order == null) {
+            this.order = order;
+        }
     }
 }

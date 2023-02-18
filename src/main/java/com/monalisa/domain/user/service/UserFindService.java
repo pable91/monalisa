@@ -1,6 +1,6 @@
 package com.monalisa.domain.user.service;
 
-import com.monalisa.domain.book.repository.UserRepository;
+import com.monalisa.domain.user.repository.UserRepository;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserResponseDto;
 import com.monalisa.domain.user.exception.UserNotFoundException;

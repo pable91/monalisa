@@ -4,11 +4,11 @@ import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.book.exception.BookAlreadyRegisterException;
-import com.monalisa.domain.book.exception.BookNotFoundException;
+import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.exception.IsNotMyBookException;
 import com.monalisa.domain.book.exception.error.BookErrorCode;
 import com.monalisa.domain.book.repository.BookRepository;
-import com.monalisa.domain.book.repository.UserRepository;
+import com.monalisa.domain.user.repository.UserRepository;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.exception.error.UserErrorCode;
@@ -26,7 +26,7 @@ public class BookUpdateService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    public BookResponseDto addBookService(final BookRequestDto.Add addBookRequestDto) {
+    public BookResponseDto registerBook(final BookRequestDto.Add addBookRequestDto) {
         final User findUser = validate(addBookRequestDto);
 
         final Book newBook = Book.registerBook(addBookRequestDto, findUser);
@@ -52,7 +52,7 @@ public class BookUpdateService {
         return findUser;
     }
 
-    public BookResponseDto updateBookService(final BookRequestDto.Update updateBookRequestDto) {
+    public BookResponseDto updateBook(final BookRequestDto.Update updateBookRequestDto) {
         Optional<Book> book = notFoundBookValidate(updateBookRequestDto.getBookId());
 
         Book findBook = book.get();
@@ -65,7 +65,7 @@ public class BookUpdateService {
         return BookResponseDto.of(findBook);
     }
 
-    public BookResponseDto deleteBookService(final Long bookId) {
+    public BookResponseDto deleteBook(final Long bookId) {
         Optional<Book> book = notFoundBookValidate(bookId);
 
         final Book findBook = book.get();
@@ -77,7 +77,7 @@ public class BookUpdateService {
     private Optional<Book> notFoundBookValidate(final Long bookId) {
         Optional<Book> book = bookRepository.findById(bookId);
         if (!book.isPresent()) {
-            throw new BookNotFoundException(BookErrorCode.BOOK_NOT_FOUND, bookId);
+            throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
         }
         return book;
     }

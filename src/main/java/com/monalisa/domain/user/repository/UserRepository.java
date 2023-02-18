@@ -1,4 +1,4 @@
-package com.monalisa.domain.book.repository;
+package com.monalisa.domain.user.repository;
 
 import com.monalisa.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

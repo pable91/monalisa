@@ -2,7 +2,7 @@ package com.monalisa.domain.user.service;
 
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
-import com.monalisa.domain.book.repository.UserRepository;
+import com.monalisa.domain.user.repository.UserRepository;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.UserResponseDto;
