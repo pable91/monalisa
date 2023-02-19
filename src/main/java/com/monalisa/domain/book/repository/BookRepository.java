@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-
-    Optional<Book> findByNameAndUser(String name, User user);
+    boolean existsByNameAndUser(String name, User user);
+//    Optional<Book> findByNameAndUser(String name, User user);
 }

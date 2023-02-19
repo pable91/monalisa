@@ -7,6 +7,7 @@ import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.UserResponseDto;
 import com.monalisa.domain.user.exception.UserNotFoundException;
+import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,7 @@ public class UserFindServiceTest {
     private UserFindService userFindService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserFindQueryService userFindQueryService;
 
     private User user;
 
@@ -53,7 +54,7 @@ public class UserFindServiceTest {
     @Test
     @DisplayName("유저 정보 응답 테스트")
     public void profile() {
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(userFindQueryService.findById(any())).thenReturn(user);
 
         UserResponseDto responseDto = userFindService.profile(1L);
 
@@ -65,7 +66,7 @@ public class UserFindServiceTest {
     @Test
     @DisplayName("유저 정보가 없으면 예외를 던진다")
     public void notUserExceptionTest() {
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        when(userFindQueryService.findById(any())).thenThrow(UserNotFoundException.class);
 
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, ()->{
             userFindService.profile(1L);

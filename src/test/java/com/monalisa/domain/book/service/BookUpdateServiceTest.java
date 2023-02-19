@@ -4,13 +4,14 @@ import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.book.exception.BookAlreadyRegisterException;
-import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.exception.IsNotMyBookException;
-import com.monalisa.domain.book.repository.BookRepository;
-import com.monalisa.domain.user.repository.UserRepository;
+import com.monalisa.domain.book.exception.NotFoundBookException;
+import com.monalisa.domain.book.service.queryService.BookFindQueryService;
+import com.monalisa.domain.book.service.queryService.BookUpdateQueryService;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.exception.UserNotFoundException;
+import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -32,10 +31,13 @@ class BookUpdateServiceTest {
     private BookUpdateService bookUpdateService;
 
     @Mock
-    private BookRepository bookRepository;
+    private UserFindQueryService userFindQueryService;
 
     @Mock
-    private UserRepository userRepository;
+    private BookFindQueryService bookFindQueryService;
+
+    @Mock
+    private BookUpdateQueryService bookUpdateQueryService;
 
     private User user;
     private BookRequestDto.Add addBookRequestDto;
@@ -70,9 +72,9 @@ class BookUpdateServiceTest {
     @DisplayName("판매할 책 등록  테스트")
     public void addBookTest() {
         // give
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(userFindQueryService.findById(any())).thenReturn(user);
 
-        when(bookRepository.save(any(Book.class))).thenReturn(Book.registerBook(addBookRequestDto, user));
+        when(bookUpdateQueryService.save(any(Book.class))).thenReturn(Book.registerBook(addBookRequestDto, user));
 //        doReturn(Book.of(addBookRequestDto, newUser)).when(bookRepository)
 //                .save(any(Book.class));
 
@@ -90,7 +92,7 @@ class BookUpdateServiceTest {
     @DisplayName("판매 책을 등록할때 유저가 없으면 예외를 던진다")
     public void userNotFoundExceptionTest() {
         // give
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        when(userFindQueryService.findById(any())).thenThrow(UserNotFoundException.class);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> {
@@ -102,11 +104,11 @@ class BookUpdateServiceTest {
     @DisplayName("판매 책을 등록할때 이미 등록된 책이면 예외를 던진다")
     public void bookAlreadyRegisterExceptionTest() {
         // give
-        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(userFindQueryService.findById(any())).thenReturn(user);
 
         Book book = Book.registerBook(addBookRequestDto, user);
 
-        when(bookRepository.findByNameAndUser(any(), any())).thenReturn(Optional.of(book));
+        when(bookFindQueryService.isExist(any(), any())).thenReturn(true);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BookAlreadyRegisterException.class, () -> {
@@ -120,7 +122,7 @@ class BookUpdateServiceTest {
         // give
         Book book = Book.registerBook(addBookRequestDto, user);
 
-        when(bookRepository.findById(any())).thenReturn(Optional.of(book));
+        when(bookFindQueryService.findById(any())).thenReturn(book);
 
         // when
         BookResponseDto bookResponseDto = bookUpdateService.updateBook(updateBookRequestDto);
@@ -137,7 +139,7 @@ class BookUpdateServiceTest {
     @DisplayName("책 수정하려고 할때 책이 존재하지 않으면 예외를 던진다")
     public void bookNotFoundExceptionTest() {
         // give
-        when(bookRepository.findById(any())).thenReturn(Optional.empty());
+        when(bookFindQueryService.findById(any())).thenThrow(NotFoundBookException.class);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(NotFoundBookException.class, () -> {
@@ -160,7 +162,7 @@ class BookUpdateServiceTest {
                 .author("update author")
                 .build();
 
-        when(bookRepository.findById(any())).thenReturn(Optional.of(book));
+        when(bookFindQueryService.findById(any())).thenReturn(book);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(IsNotMyBookException.class, () -> {
@@ -174,7 +176,7 @@ class BookUpdateServiceTest {
         // give
         Book book = Book.registerBook(addBookRequestDto, user);
 
-        when(bookRepository.findById(any())).thenReturn(Optional.of(book));
+        when(bookFindQueryService.findById(book.getId())).thenReturn(book);
 
         // when
         BookResponseDto bookResponseDto = bookUpdateService.deleteBook(book.getId());
@@ -187,10 +189,10 @@ class BookUpdateServiceTest {
     }
 
     @Test
-    @DisplayName("등록된 책을 삭째할때 해당 책은 존재하지않으면 예외를 던진다")
+    @DisplayName("등록된 책을 삭제할때 해당 책은 존재하지않으면 예외를 던진다")
     public void bookNotFoundExceptionTestByDelete() {
         // give
-        when(bookRepository.findById(any())).thenReturn(Optional.empty());
+        when(bookFindQueryService.findById(any())).thenThrow(NotFoundBookException.class);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(NotFoundBookException.class, () -> {

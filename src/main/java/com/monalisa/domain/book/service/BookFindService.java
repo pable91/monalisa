@@ -2,9 +2,7 @@ package com.monalisa.domain.book.service;
 
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
-import com.monalisa.domain.book.exception.NotFoundBookException;
-import com.monalisa.domain.book.exception.error.BookErrorCode;
-import com.monalisa.domain.book.repository.BookRepository;
+import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookFindService {
 
-    private final BookRepository bookRepository;
+    private final BookFindQueryService bookFindQueryService;
 
     public BookResponseDto findById(final Long bookId) {
-        Book findBook = bookRepository.findById(bookId).orElseThrow(() -> {
-            throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
-        });
+        Book findBook = bookFindQueryService.findById(bookId);
 
         return BookResponseDto.of(findBook);
     }
