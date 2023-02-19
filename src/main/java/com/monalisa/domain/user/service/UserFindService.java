@@ -25,12 +25,10 @@ public class UserFindService {
 
     @Transactional(readOnly = true)
     public UserResponseDto profile(final Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if(!user.isPresent()){
+        final User findUser = userRepository.findById(userId).orElseThrow(() -> {
             throw new UserNotFoundException(userId, UserErrorCode.USER_NOT_FOUND);
-        }
+        });
 
-        User findUser = user.get();
         return UserResponseDto.of(findUser);
     }
 }

@@ -37,12 +37,9 @@ public class BookUpdateService {
     private User validate(final BookRequestDto.Add addBookRequestDto) {
         // TODO
         // 나중에 로그인 기능이 있다면 굳이 필요할까?
-        Optional<User> user = userRepository.findById(addBookRequestDto.getUserId());
-        if (!user.isPresent()) {
+        final User findUser = userRepository.findById(addBookRequestDto.getUserId()).orElseThrow(() -> {
             throw new UserNotFoundException(addBookRequestDto.getUserId(), UserErrorCode.USER_NOT_FOUND);
-        }
-
-        final User findUser = user.get();
+        });
 
         Optional<Book> findBook = bookRepository.findByNameAndUser(addBookRequestDto.getName(), findUser);
         if (findBook.isPresent()) {
@@ -53,9 +50,7 @@ public class BookUpdateService {
     }
 
     public BookResponseDto updateBook(final BookRequestDto.Update updateBookRequestDto) {
-        Optional<Book> book = notFoundBookValidate(updateBookRequestDto.getBookId());
-
-        Book findBook = book.get();
+        final Book findBook = notFoundBookValidate(updateBookRequestDto.getBookId());
         if (!findBook.isMine(updateBookRequestDto.getUserId())) {
             throw new IsNotMyBookException(BookErrorCode.IS_NOT_MY_BOOK, updateBookRequestDto.getBookId());
         }
@@ -66,19 +61,16 @@ public class BookUpdateService {
     }
 
     public BookResponseDto deleteBook(final Long bookId) {
-        Optional<Book> book = notFoundBookValidate(bookId);
+        final Book findBook = notFoundBookValidate(bookId);
 
-        final Book findBook = book.get();
         bookRepository.delete(findBook);
 
         return BookResponseDto.of(findBook);
     }
 
-    private Optional<Book> notFoundBookValidate(final Long bookId) {
-        Optional<Book> book = bookRepository.findById(bookId);
-        if (!book.isPresent()) {
+    private Book notFoundBookValidate(final Long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() -> {
             throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
-        }
-        return book;
+        });
     }
 }
