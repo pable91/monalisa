@@ -51,3 +51,8 @@ book store(toy project)
 ### 22/2/17
 - 책 조회 기능 및 서비스 테스트 코드
 - 유저 조회 기능 및 서비스 테스트 코드
+
+### 22/2/20
+- 주문(Order) api 구현
+- QueryService 추가 및 리팩토링
+- 주문(Order) 기능&예외 테스트, DTO 테스트
