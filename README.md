@@ -17,13 +17,17 @@ book store(toy project)
     - 개발자는 코드를 작성하는것뿐만 아니라 타인과의 의사소통도 매우 중요하다. 하지만 타인에게 내 의견이나 생각을 전달하는것은 매우 어렵다. 이것도 연습해야한다고 생각한다. 그래서  이 프로젝트를 진행하면서 많이, 꾸준히 기록하려 한다. 심지어 다른곳에서 습득한 지식도 최대한 내 방식대로 정제해서 기록하려고 노력할 것이다.
 
 
-# stack
+
+# 사용
 - java11
 - Springboot 2.7
 - Spring-Data-JPA
 - QueryDSL
 - H2
 - Junit5
+
+# 작업 완료 현황
+https://www.notion.so/pozit/edeac4eb180241a2a0e4ffb219fd0b13?v=3ad6c72d320e4844beaf91a00114bf8a&pvs=4
 
 # 개발일지
 
