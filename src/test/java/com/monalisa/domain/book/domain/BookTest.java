@@ -66,4 +66,14 @@ class BookTest {
         Assertions.assertThat(newBook.getCost()).isEqualTo(500);
         Assertions.assertThat(newBook.getAuthor()).isEqualTo("author2");
     }
+
+    @Test
+    @DisplayName("책 판매 상태로 바꾸는 메소드 테스트")
+    public void setBuyStateTest() {
+        Assertions.assertThat(newBook.isSold()).isFalse();
+
+        newBook.setBuyState();
+
+        Assertions.assertThat(newBook.isSold()).isTrue();
+    }
 }

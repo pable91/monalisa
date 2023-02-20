@@ -3,17 +3,13 @@ package com.monalisa.domain.order.service;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.exception.BookAlreadySoldException;
 import com.monalisa.domain.book.exception.BuyNotMyBookException;
-import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.exception.error.BookErrorCode;
-import com.monalisa.domain.book.repository.BookRepository;
+import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import com.monalisa.domain.order.domain.Order;
 import com.monalisa.domain.order.dto.request.OrderRequestDto;
 import com.monalisa.domain.order.dto.response.OrderResponseDto;
-import com.monalisa.domain.order.repository.OrderRepository;
 import com.monalisa.domain.user.domain.User;
-import com.monalisa.domain.user.exception.UserNotFoundException;
-import com.monalisa.domain.user.exception.error.UserErrorCode;
-import com.monalisa.domain.user.repository.UserRepository;
+import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,31 +19,29 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderBuyService {
 
-    private final BookRepository bookRepository;
-    private final UserRepository userRepository;
-    private final OrderRepository orderRepository;
+    private final OrderUpdateQueryService orderUpdateQueryService;
+    private final UserFindQueryService userFindQueryService;
+    private final BookFindQueryService bookFindQueryService;
 
     public OrderResponseDto createOrder(final OrderRequestDto.Buy requestDto) {
-        final User findUser = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> {
-                    throw new UserNotFoundException(requestDto.getUserId(), UserErrorCode.USER_NOT_FOUND);
-                });
+        final User buyer = userFindQueryService.findById(requestDto.getBuyerId());
+        final Book targetBook = bookFindQueryService.findById(requestDto.getBookId());
 
-        final Book findBook = bookRepository.findById(requestDto.getBookId()).orElseThrow(() -> {
-            throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, requestDto.getBookId());
-        });
+        validate(requestDto, targetBook);
 
-        if (findBook.isMine(requestDto.getUserId())) {
+        Order order = Order.createOrder(targetBook);
+        orderUpdateQueryService.save(order);
+
+        return OrderResponseDto.of(targetBook, buyer.getName());
+    }
+
+    private void validate(OrderRequestDto.Buy requestDto, Book book) {
+        if (book.isMine(requestDto.getBuyerId())) {
             throw new BuyNotMyBookException(BookErrorCode.BUY_NOT_MY_BOOK, requestDto.getBookId());
         }
 
-        if(findBook.isSold()) {
+        if(book.isSold()) {
             throw new BookAlreadySoldException(BookErrorCode.BOOK_ALREADY_SOLD, requestDto.getBookId());
         }
-
-        Order order = Order.createOrder(findBook);
-        orderRepository.save(order);
-
-        return OrderResponseDto.of(findBook, findUser.getName());
     }
 }

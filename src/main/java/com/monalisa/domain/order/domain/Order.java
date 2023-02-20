@@ -3,6 +3,7 @@ package com.monalisa.domain.order.domain;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Order extends BaseTimeEntity {
 
     @Id
