@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 public class Book {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id", updatable = false)
     private Long id;
 

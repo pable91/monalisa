@@ -19,12 +19,6 @@ public class BookFindQueryService {
         return bookRepository.existsByNameAndUser(addBookRequestDto.getName(), findUser);
     }
 
-//    public Book findByNameAndUser(final BookRequestDto.Add addBookRequestDto, final User findUser) {
-//        return bookRepository.findByNameAndUser(addBookRequestDto.getName(), findUser).orElseThrow(() -> {
-//            throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, addBookRequestDto.getName());
-//        });
-//    }
-
     public Book findById(final Long bookId) {
         return bookRepository.findById(bookId).orElseThrow(() -> {
             throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
