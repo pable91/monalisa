@@ -26,13 +26,22 @@ book store(toy project)
 - Junit5
 
 # 개발일지
-### 22/2/11
-- Spring, JPA 기본설정
-- 책 판매 등록 api 구현
-- 등록한 책 수정 api 구현
-- 도메인, DTO 테스트 코드 구현
-- [Service와 ServiceImpl를 계속 이대로 써야할까?](https://github.com/pable91/TIL/blob/main/Service%EC%99%80%20ServiceImpl.md)
-- [DTO 관리](https://github.com/pable91/TIL/blob/main/%EB%84%88%EB%AC%B4%20%EB%A7%8E%EC%9D%80%20DTO%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EA%B4%80%EB%A6%AC.md)
+
+### 22/2/20
+- 주문(Order) api 구현
+- QueryService 추가 및 리팩토링
+- 주문(Order) 기능&예외 테스트, DTO 테스트
+- [Service안에 Service 만들기](https://github.com/pable91/TIL/blob/main/Service%EC%95%88%EC%97%90%20Service%20%EB%A7%8C%EB%93%A4%EA%B8%B0.md) 
+
+### 22/2/17
+- 책 조회 기능 및 서비스 테스트 코드
+- 유저 조회 기능 및 서비스 테스트 코드
+
+### 22/2/15
+- Service slice 테스트 코드 작성
+- Service 예외 처리 테스트 코드 
+- 책 삭제 api 구현
+- [JPA 프록시 객체 json 반환 문제](https://github.com/pable91/TIL/blob/main/JPA%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%EA%B0%9D%EC%B2%B4%20json%20%EB%B0%98%ED%99%98%20%EB%AC%B8%EC%A0%9C.md)
 
 ### 22/2/13
 - @ControllerAdvice 로 전역 에러 핸들링
@@ -42,17 +51,10 @@ book store(toy project)
 - [예외 핸들링 및 응답 객체 리팩토링](https://github.com/pable91/TIL/blob/main/%EC%98%88%EC%99%B8%20%ED%95%B8%EB%93%A4%EB%A7%81%20%EB%B0%8F%20%EC%9D%91%EB%8B%B5%20%EA%B0%9D%EC%B2%B4%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
 - [ErrorCode 리팩토링](https://github.com/pable91/TIL/blob/main/ErrorCode%20%EC%B6%94%EC%83%81%ED%99%94%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
 
-### 22/2/15
-- Service slice 테스트 코드 작성
-- Service 예외 처리 테스트 코드 
-- 책 삭제 api 구현
-- [JPA 프록시 객체 json 반환 문제](https://github.com/pable91/TIL/blob/main/JPA%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%EA%B0%9D%EC%B2%B4%20json%20%EB%B0%98%ED%99%98%20%EB%AC%B8%EC%A0%9C.md)
-
-### 22/2/17
-- 책 조회 기능 및 서비스 테스트 코드
-- 유저 조회 기능 및 서비스 테스트 코드
-
-### 22/2/20
-- 주문(Order) api 구현
-- QueryService 추가 및 리팩토링
-- 주문(Order) 기능&예외 테스트, DTO 테스트
+### 22/2/11
+- Spring, JPA 기본설정
+- 책 판매 등록 api 구현
+- 등록한 책 수정 api 구현
+- 도메인, DTO 테스트 코드 구현
+- [Service와 ServiceImpl를 계속 이대로 써야할까?](https://github.com/pable91/TIL/blob/main/Service%EC%99%80%20ServiceImpl.md)
+- [DTO 관리](https://github.com/pable91/TIL/blob/main/%EB%84%88%EB%AC%B4%20%EB%A7%8E%EC%9D%80%20DTO%20%ED%81%B4%EB%9E%98%EC%8A%A4%20%EA%B4%80%EB%A6%AC.md)
