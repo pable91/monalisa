@@ -18,7 +18,7 @@ book store(toy project)
 
 
 
-# 사용
+# 사용기술
 - java11
 - Springboot 2.7
 - Spring-Data-JPA
