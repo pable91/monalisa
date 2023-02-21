@@ -1,8 +1,7 @@
-package com.monalisa.domain.user.service;
+package com.monalisa.domain.user.service.queryService;
 
 import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.repository.UserRepository;
-import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

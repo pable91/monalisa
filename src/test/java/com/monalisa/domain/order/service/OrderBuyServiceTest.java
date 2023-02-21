@@ -46,15 +46,9 @@ class OrderBuyServiceTest {
 
     @BeforeEach
     public void init() {
-        UserRequestDto userRequestDto = UserRequestDto.builder()
-                .name("seller")
-                .build();
-        seller = User.from(1L, userRequestDto.getName());
+        seller = User.createTestUser(1L, "seller");
 
-        userRequestDto = UserRequestDto.builder()
-                .name("buyer")
-                .build();
-        buyer = User.from(2L, userRequestDto.getName());
+        buyer = User.createTestUser(2L, "buyer");
 
         BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
                 .name("book1")

@@ -45,10 +45,7 @@ class BookUpdateServiceTest {
 
     @BeforeEach
     public void init() {
-        UserRequestDto userRequestDto = UserRequestDto.builder()
-                .name("kim")
-                .build();
-        user = User.from(1L, userRequestDto.getName());
+        user = User.createTestUser(1L, "kim");
 
         addBookRequestDto = BookRequestDto.Add.builder()
                 .name("kim")
@@ -69,7 +66,7 @@ class BookUpdateServiceTest {
     }
 
     @Test
-    @DisplayName("판매할 책 등록  테스트")
+    @DisplayName("판매할 책 등록 테스트")
     public void addBookTest() {
         // give
         when(userFindQueryService.findById(any())).thenReturn(user);

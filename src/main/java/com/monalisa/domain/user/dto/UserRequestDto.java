@@ -6,15 +6,11 @@ import javax.validation.constraints.NotBlank;
 
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class UserRequestDto {
 
-    @NotBlank
-    private String name;
-
     @Getter
+    @Builder
     public static class singUp {
 
         @NotBlank
@@ -28,6 +24,7 @@ public class UserRequestDto {
     }
 
     @Getter
+    @Builder
     public static class login {
         @NotBlank
         private String accountId;

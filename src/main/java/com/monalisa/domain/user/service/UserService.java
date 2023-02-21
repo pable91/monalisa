@@ -6,8 +6,8 @@ import com.monalisa.domain.user.dto.UserResponseDto;
 import com.monalisa.domain.user.exception.AlreadyExistUserException;
 import com.monalisa.domain.user.exception.WrongPasswordException;
 import com.monalisa.domain.user.exception.error.UserErrorCode;
-import com.monalisa.domain.user.repository.UserRepository;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
+import com.monalisa.domain.user.service.queryService.UserUpdateQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserFindService {
+public class UserService {
 
     private final UserFindQueryService userFindQueryService;
-    private final UserRepository userRepository;
+    private final UserUpdateQueryService userUpdateQueryService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -39,7 +39,7 @@ public class UserFindService {
 
         String pw = passwordEncoder.encode(signupUserDto.getPw());
         User user = User.createUser(accountId, pw, signupUserDto.getName());
-        return userRepository.save(user);
+        return userUpdateQueryService.save(user);
     }
 
     @Transactional(readOnly = true)

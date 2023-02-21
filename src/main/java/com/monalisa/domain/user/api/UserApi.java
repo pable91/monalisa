@@ -3,7 +3,7 @@ package com.monalisa.domain.user.api;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.UserResponseDto;
-import com.monalisa.domain.user.service.UserFindService;
+import com.monalisa.domain.user.service.UserService;
 import com.monalisa.global.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -18,12 +18,12 @@ import javax.validation.Valid;
 @RequestMapping("user")
 public class UserApi {
 
-    private final UserFindService userFindService;
+    private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid final UserRequestDto.singUp signupUserDto) {
-        User newUser = userFindService.signup(signupUserDto);
+        User newUser = userService.signup(signupUserDto);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -32,7 +32,7 @@ public class UserApi {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid final UserRequestDto.login loginUserDto) {
-        User user = userFindService.login(loginUserDto);
+        User user = userService.login(loginUserDto);
         String token = jwtTokenProvider.createToken(user.getAccountID());
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -45,8 +45,6 @@ public class UserApi {
     public ResponseEntity profile(@PathVariable final Long userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userFindService.profile(userId));
+                .body(userService.profile(userId));
     }
-
-
 }

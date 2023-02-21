@@ -53,7 +53,7 @@ public class User {
         return new User(name);
     }
 
-    public static User from(final Long id, final String name) {
+    public static User createTestUser(final Long id, final String name) {
         return new User(id, name);
     }
 

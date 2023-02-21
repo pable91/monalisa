@@ -33,10 +33,7 @@ public class BookFindServiceTest {
 
     @BeforeEach
     public void init() {
-        UserRequestDto userRequestDto = UserRequestDto.builder()
-                .name("kim")
-                .build();
-        user = User.from(1L, userRequestDto.getName());
+        user = User.createTestUser(1L, "kim");
 
         addBookRequestDto = BookRequestDto.Add.builder()
                 .name("kim")
