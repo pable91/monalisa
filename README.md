@@ -31,6 +31,9 @@ https://www.notion.so/pozit/edeac4eb180241a2a0e4ffb219fd0b13?v=3ad6c72d320e4844b
 
 # 개발일지
 
+### 22/2/21
+- jwt를 사용해서 로그인 및 인증 기능 추가
+
 ### 22/2/20
 - 주문(Order) api 구현
 - QueryService 추가 및 리팩토링
