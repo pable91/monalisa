@@ -1,13 +1,17 @@
 package com.monalisa.domain.user.api;
 
+import com.monalisa.domain.user.domain.User;
+import com.monalisa.domain.user.dto.UserRequestDto;
+import com.monalisa.domain.user.dto.UserResponseDto;
 import com.monalisa.domain.user.service.UserFindService;
+import com.monalisa.global.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +19,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApi {
 
     private final UserFindService userFindService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid final UserRequestDto.singUp signupUserDto) {
+        User newUser = userFindService.signup(signupUserDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new UserResponseDto(newUser));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid final UserRequestDto.login loginUserDto) {
+        User user = userFindService.login(loginUserDto);
+        String token = jwtTokenProvider.createToken(user.getAccountID());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("JWT", token);
+
+        return new ResponseEntity(token , httpHeaders, HttpStatus.OK);
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity profile(@PathVariable final Long userId) {
@@ -22,5 +47,6 @@ public class UserApi {
                 .status(HttpStatus.OK)
                 .body(userFindService.profile(userId));
     }
+
 
 }

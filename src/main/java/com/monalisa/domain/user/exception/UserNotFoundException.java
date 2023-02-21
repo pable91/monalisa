@@ -7,4 +7,8 @@ public class UserNotFoundException extends EntityNotFoundException {
     public UserNotFoundException(Long userId, ErrorCode errorCode) {
         super(errorCode, "[user id "+ userId + "] " + errorCode.getMessage());
     }
+
+    public UserNotFoundException(String accountId, ErrorCode errorCode) {
+        super(errorCode, "[account id "+ accountId + "] " + errorCode.getMessage());
+    }
 }

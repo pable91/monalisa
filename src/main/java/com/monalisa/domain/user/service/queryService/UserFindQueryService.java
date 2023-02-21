@@ -18,4 +18,14 @@ public class UserFindQueryService {
             throw new UserNotFoundException(userId, UserErrorCode.USER_NOT_FOUND);
         });
     }
+
+    public boolean existByAccountId(final String ID) {
+        return userRepository.existsByAccountID(ID);
+    }
+
+    public User findByAccountID(final String accountId) {
+        return userRepository.findByAccountID(accountId).orElseThrow(() -> {
+            throw new UserNotFoundException(accountId, UserErrorCode.USER_NOT_FOUND);
+        });
+    }
 }
