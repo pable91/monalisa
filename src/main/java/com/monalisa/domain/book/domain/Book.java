@@ -31,7 +31,7 @@ public class Book {
     @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(name = "isSold")
+    @Column(name = "is_sold")
     private boolean isSold;
 
     @ManyToOne(fetch = FetchType.LAZY)
