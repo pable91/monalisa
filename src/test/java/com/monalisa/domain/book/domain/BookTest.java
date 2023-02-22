@@ -29,7 +29,7 @@ class BookTest {
     @Test
     @DisplayName("Book 생성 테스트")
     public void createBookTest() {
-        Assertions.assertThat(newBook.getName()).isEqualTo("name");
+        Assertions.assertThat(newBook.getName()).isEqualTo("name1");
         Assertions.assertThat(newBook.getDesc()).isEqualTo("desc1");
         Assertions.assertThat(newBook.getCost()).isEqualTo(10000);
         Assertions.assertThat(newBook.getAuthor()).isEqualTo("author1");
