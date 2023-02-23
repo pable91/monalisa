@@ -23,7 +23,7 @@ book store(toy project)
 - Springboot 2.7
 - Spring-Data-JPA
 - QueryDSL
-- H2
+- H2(AWS에서는 MariaDB)
 - Junit5
 - AWS ec2
 
@@ -32,27 +32,32 @@ https://www.notion.so/pozit/edeac4eb180241a2a0e4ffb219fd0b13?v=3ad6c72d320e4844b
 
 # 개발일지
 
-### 22/2/21
+### 23/2/23
+- AWS ec3 배포 및 외부에서 접속 가능
+- 빌드 & 배포 자동화(구현중)
+- [AWS 서비스 배포하기(EC2, RDS생성)](https://github.com/pable91/TIL/blob/main/AWS%20%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0(EC2%2C%20RDS%EC%83%9D%EC%84%B1).md)
+
+### 23/2/21
 - jwt를 사용해서 로그인 및 인증 기능 추가
 - 회원가입 기능 추가
 
-### 22/2/20
+### 23/2/20
 - 주문(Order) api 구현
 - QueryService 추가 및 리팩토링
 - 주문(Order) 기능&예외 테스트, DTO 테스트
 - [Service안에 Service 만들기](https://github.com/pable91/TIL/blob/main/Service%EC%95%88%EC%97%90%20Service%20%EB%A7%8C%EB%93%A4%EA%B8%B0.md) 
 
-### 22/2/17
+### 23/2/17
 - 책 조회 기능 및 서비스 테스트 코드
 - 유저 조회 기능 및 서비스 테스트 코드
 
-### 22/2/15
+### 23/2/15
 - Service slice 테스트 코드 작성
 - Service 예외 처리 테스트 코드 
 - 책 삭제 api 구현
 - [JPA 프록시 객체 json 반환 문제](https://github.com/pable91/TIL/blob/main/JPA%20%ED%94%84%EB%A1%9D%EC%8B%9C%20%EA%B0%9D%EC%B2%B4%20json%20%EB%B0%98%ED%99%98%20%EB%AC%B8%EC%A0%9C.md)
 
-### 22/2/13
+### 23/2/13
 - @ControllerAdvice 로 전역 에러 핸들링
 - ErrorResponse 응답 객체 구현
 - 사용자 정의(BusinessException, InvalidValueException, EntityNotFoundException) Exception 구현
@@ -60,7 +65,7 @@ https://www.notion.so/pozit/edeac4eb180241a2a0e4ffb219fd0b13?v=3ad6c72d320e4844b
 - [예외 핸들링 및 응답 객체 리팩토링](https://github.com/pable91/TIL/blob/main/%EC%98%88%EC%99%B8%20%ED%95%B8%EB%93%A4%EB%A7%81%20%EB%B0%8F%20%EC%9D%91%EB%8B%B5%20%EA%B0%9D%EC%B2%B4%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
 - [ErrorCode 리팩토링](https://github.com/pable91/TIL/blob/main/ErrorCode%20%EC%B6%94%EC%83%81%ED%99%94%20%ED%94%BC%EB%93%9C%EB%B0%B1.md)
 
-### 22/2/11
+### 23/2/11
 - Spring, JPA 기본설정
 - 책 판매 등록 api 구현
 - 등록한 책 수정 api 구현
