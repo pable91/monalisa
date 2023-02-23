@@ -38,7 +38,7 @@ https://www.notion.so/pozit/edeac4eb180241a2a0e4ffb219fd0b13?v=3ad6c72d320e4844b
 
 ### 23/2/23
 - AWS ec3 배포 및 외부에서 접속 가능
-- 빌드 & 배포 자동화(구현중)
+- 빌드 & 배포 자동화
 - [AWS 서비스 배포하기(EC2, RDS생성)](https://github.com/pable91/TIL/blob/main/AWS%20%EC%84%9C%EB%B9%84%EC%8A%A4%20%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0(EC2%2C%20RDS%EC%83%9D%EC%84%B1).md)
 
 ### 23/2/21
