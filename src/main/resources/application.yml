@@ -19,6 +19,9 @@ spring:
     init:
       mode: always
 
+  pid:
+    file: /home/ec2-user/app/step2/monalisa.pid
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
