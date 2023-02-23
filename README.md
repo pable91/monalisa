@@ -27,6 +27,10 @@ book store(toy project)
 - Junit5
 - AWS ec2
 
+# 구조
+![architecture](https://user-images.githubusercontent.com/22884224/220965624-b52c7655-febb-42ab-b8cd-c38567eb726f.png)
+
+
 # 작업 완료 현황
 https://www.notion.so/pozit/edeac4eb180241a2a0e4ffb219fd0b13?v=3ad6c72d320e4844beaf91a00114bf8a&pvs=4
 
