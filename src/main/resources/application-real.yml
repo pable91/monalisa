@@ -6,6 +6,3 @@ spring:
     properties:
       hibernate:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
