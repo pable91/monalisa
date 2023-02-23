@@ -23,6 +23,9 @@ public class UserApi {
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid final UserRequestDto.singUp signupUserDto) {
+
+        System.out.println("test");
+
         User newUser = userService.signup(signupUserDto);
 
         return ResponseEntity
