@@ -20,12 +20,10 @@ public class User {
     @Column(name = "user_id", updatable = false)
     private Long id;
 
-    //    @Column(name = "id", nullable = false)
-    @Column(name = "account_id")
+    @Column(name = "account_id", nullable = false)
     private String accountID;
 
-    //    @Column(name = "pw", nullable = false)
-    @Column(name = "pw")
+    @Column(name = "pw", nullable = false)
     private String pw;
 
     @Column(name = "name", nullable = false)
