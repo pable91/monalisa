@@ -11,7 +11,7 @@ public class UserRequestDto {
 
     @Getter
     @Builder
-    public static class singUp {
+    public static class SignUp {
 
         @NotBlank
         private String accountId;
@@ -25,7 +25,7 @@ public class UserRequestDto {
 
     @Getter
     @Builder
-    public static class login {
+    public static class Login {
         @NotBlank
         private String accountId;
 

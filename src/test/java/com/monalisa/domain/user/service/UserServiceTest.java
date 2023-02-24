@@ -4,7 +4,7 @@ import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
-import com.monalisa.domain.user.dto.UserResponseDto;
+import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.exception.AlreadyExistUserException;
 import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.exception.WrongPasswordException;
@@ -62,11 +62,11 @@ public class UserServiceTest {
     public void profile() {
         when(userFindQueryService.findById(any())).thenReturn(user);
 
-        UserResponseDto responseDto = userService.profile(1L);
+        UserResponseDto.Profile responseDto = userService.profile(1L);
 
         Assertions.assertThat(responseDto.getUserName()).isEqualTo("kim");
-        Assertions.assertThat(responseDto.getBookList().size()).isEqualTo(1);
-        Assertions.assertThat(responseDto.getBookList().get(0).getName()).isEqualTo("book1");
+        Assertions.assertThat(responseDto.getRegisterBookList().size()).isEqualTo(1);
+        Assertions.assertThat(responseDto.getRegisterBookList().get(0).getName()).isEqualTo("book1");
     }
 
     @Test
@@ -85,8 +85,8 @@ public class UserServiceTest {
         // give
         when(userFindQueryService.existByAccountId(any())).thenReturn(false);
 
-        UserRequestDto.singUp singUpUserDto =
-                UserRequestDto.singUp.builder()
+        UserRequestDto.SignUp signUpUserDto =
+                UserRequestDto.SignUp.builder()
                 .accountId("kkk")
                 .pw("12345")
                 .name("kim")
@@ -98,12 +98,11 @@ public class UserServiceTest {
         when(userUpdateQueryService.save(any())).thenReturn(createUser);
 
         // when
-        User user = userService.signup(singUpUserDto);
+        UserResponseDto.SignUp responseDto = userService.signup(signUpUserDto);
 
         // then
-        Assertions.assertThat(user.getAccountID()).isEqualTo("kkk");
-        Assertions.assertThat(user.getPw()).isEqualTo(pw);
-        Assertions.assertThat(user.getName()).isEqualTo("kim");
+        Assertions.assertThat(responseDto.getAccountId()).isEqualTo("kkk");
+        Assertions.assertThat(responseDto.getName()).isEqualTo("kim");
     }
 
     @Test
@@ -112,8 +111,8 @@ public class UserServiceTest {
         // give
         when(userFindQueryService.existByAccountId(any())).thenThrow(AlreadyExistUserException.class);
 
-        UserRequestDto.singUp singUpUserDto =
-                UserRequestDto.singUp.builder()
+        UserRequestDto.SignUp signUpUserDto =
+                UserRequestDto.SignUp.builder()
                         .accountId("kkk")
                         .pw("12345")
                         .name("kim")
@@ -121,7 +120,7 @@ public class UserServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(AlreadyExistUserException.class, ()->{
-            userService.signup(singUpUserDto);
+            userService.signup(signUpUserDto);
         });
     }
 
@@ -134,8 +133,8 @@ public class UserServiceTest {
 
         when(userFindQueryService.findByAccountID(any())).thenReturn(user);
 
-        UserRequestDto.login loginDto =
-                UserRequestDto.login.builder()
+        UserRequestDto.Login loginDto =
+                UserRequestDto.Login.builder()
                 .accountId("kkk")
                 .pw("12345")
                 .build();
@@ -157,8 +156,8 @@ public class UserServiceTest {
 
         when(userFindQueryService.findByAccountID(any())).thenReturn(user);
 
-        UserRequestDto.login loginDto =
-                UserRequestDto.login.builder()
+        UserRequestDto.Login loginDto =
+                UserRequestDto.Login.builder()
                         .accountId("kkk")
                         .pw("321")
                         .build();

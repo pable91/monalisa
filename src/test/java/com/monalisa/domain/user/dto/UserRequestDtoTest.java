@@ -31,13 +31,13 @@ class UserRequestDtoTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        UserRequestDto.singUp signUpRequestDto =  UserRequestDto.singUp.builder()
+        UserRequestDto.SignUp signUpRequestDto =  UserRequestDto.SignUp.builder()
                 .accountId(accountId)
                 .pw(pw)
                 .name(name)
                 .build();
 
-        Set<ConstraintViolation<UserRequestDto.singUp>> violations = validator.validate(signUpRequestDto);
+        Set<ConstraintViolation<UserRequestDto.SignUp>> violations = validator.validate(signUpRequestDto);
         Assertions.assertThat(violations.size()).isEqualTo(invalidCnt);
     }
 
@@ -56,12 +56,12 @@ class UserRequestDtoTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        UserRequestDto.login loginRequestDto =  UserRequestDto.login.builder()
+        UserRequestDto.Login loginRequestDto =  UserRequestDto.Login.builder()
                 .accountId(accountId)
                 .pw(pw)
                 .build();
 
-        Set<ConstraintViolation<UserRequestDto.login>> violations = validator.validate(loginRequestDto);
+        Set<ConstraintViolation<UserRequestDto.Login>> violations = validator.validate(loginRequestDto);
         Assertions.assertThat(violations.size()).isEqualTo(invalidCnt);
     }
 }

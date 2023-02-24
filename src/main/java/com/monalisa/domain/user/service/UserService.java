@@ -2,7 +2,7 @@ package com.monalisa.domain.user.service;
 
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
-import com.monalisa.domain.user.dto.UserResponseDto;
+import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.exception.AlreadyExistUserException;
 import com.monalisa.domain.user.exception.WrongPasswordException;
 import com.monalisa.domain.user.exception.error.UserErrorCode;
@@ -24,13 +24,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserResponseDto profile(final Long userId) {
+    public UserResponseDto.Profile profile(final Long userId) {
         final User findUser = userFindQueryService.findById(userId);
 
-        return UserResponseDto.of(findUser);
+        return UserResponseDto.Profile.of(findUser);
     }
 
-    public User signup(final UserRequestDto.singUp signupUserDto) {
+    public UserResponseDto.SignUp signup(final UserRequestDto.SignUp signupUserDto) {
         String accountId = signupUserDto.getAccountId();
 
         if(userFindQueryService.existByAccountId(accountId)) {
@@ -39,11 +39,11 @@ public class UserService {
 
         String pw = passwordEncoder.encode(signupUserDto.getPw());
         User user = User.createUser(accountId, pw, signupUserDto.getName());
-        return userUpdateQueryService.save(user);
+        return UserResponseDto.SignUp.of(userUpdateQueryService.save(user));
     }
 
     @Transactional(readOnly = true)
-    public User login(final UserRequestDto.login loginUserDto) {
+    public User login(final UserRequestDto.Login loginUserDto) {
         String accountId = loginUserDto.getAccountId();
 
         User findUser = userFindQueryService.findByAccountID(accountId);
