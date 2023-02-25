@@ -38,7 +38,7 @@ public class UserService {
         }
 
         String pw = passwordEncoder.encode(signupUserDto.getPw());
-        User user = User.createUser(accountId, pw, signupUserDto.getName());
+        User user = User.createUser(accountId, pw, signupUserDto.getName(), signupUserDto.getEmail());
         return UserResponseDto.SignUp.of(userUpdateQueryService.save(user));
     }
 

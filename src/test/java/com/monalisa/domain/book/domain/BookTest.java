@@ -21,7 +21,7 @@ class BookTest {
                 .userId(1L)
                 .build();
 
-        User user = User.createTestUser(1L, "kim");
+        User user = User.createTestUser(1L, "kim", "kim@naver.com");
 
         newBook = Book.registerBook(addBookRequestDto, user);
     }

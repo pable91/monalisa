@@ -45,7 +45,7 @@ class BookUpdateServiceTest {
 
     @BeforeEach
     public void init() {
-        user = User.createTestUser(1L, "kim");
+        user = User.createTestUser(1L, "kim", "kim@naver.com");
 
         addBookRequestDto = BookRequestDto.Add.builder()
                 .name("kim")

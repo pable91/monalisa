@@ -33,6 +33,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "user_role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(mappedBy = "user")
     private List<Book> registerBooks = new ArrayList<>();
 
@@ -40,26 +44,30 @@ public class User extends BaseTimeEntity {
         this.name = name;
     }
 
-    private User(final Long id, final String name) {
+    private User(final Long id, final String name, final String email) {
         this.id = id;
         this.name = name;
+        this.email = email;
+        this.role = Role.NORMAL;
     }
 
-    private User(final String accountID, final String pw, final String name) {
+    private User(final String accountID, final String pw, final String name, final String email) {
         this.accountID = accountID;
         this.pw = pw;
         this.name = name;
+        this.email = email;
+        this.role = Role.NORMAL;
     }
 
     public static User of(final String name) {
         return new User(name);
     }
 
-    public static User createTestUser(final Long id, final String name) {
-        return new User(id, name);
+    public static User createTestUser(final Long id, final String name, final String email) {
+        return new User(id, name, email);
     }
 
-    public static User createUser(String accountId, String pw, String name) {
-        return new User(accountId, pw, name);
+    public static User createUser(String accountId, String pw, String name, final String email) {
+        return new User(accountId, pw, name, email);
     }
 }

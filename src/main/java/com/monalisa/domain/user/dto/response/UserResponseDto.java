@@ -1,6 +1,7 @@
 package com.monalisa.domain.user.dto.response;
 
 import com.monalisa.domain.book.dto.response.BookResponseDto;
+import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
 import lombok.Getter;
 
@@ -34,12 +35,14 @@ public class UserResponseDto {
         private String userName;
         private String name;
         private String email;
+        private Role role;
         private List<BookResponseDto> registerBookList;
 
         public Profile(User user) {
             this.userName = user.getName();
             this.name = user.getName();
             this.email = user.getEmail();
+            this.role = user.getRole();
             registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());

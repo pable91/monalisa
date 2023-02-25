@@ -2,6 +2,7 @@ package com.monalisa.domain.user.service;
 
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
+import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
@@ -44,7 +45,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void init() {
-        user = User.createTestUser(1L, "kim");
+        user = User.createTestUser(1L, "kim", "kim@naver.com");
 
         BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
                 .name("book1")
@@ -65,6 +66,8 @@ public class UserServiceTest {
         UserResponseDto.Profile responseDto = userService.profile(1L);
 
         Assertions.assertThat(responseDto.getUserName()).isEqualTo("kim");
+        Assertions.assertThat(responseDto.getEmail()).isEqualTo("kim@naver.com");
+        Assertions.assertThat(responseDto.getRole()).isEqualTo(Role.NORMAL);
         Assertions.assertThat(responseDto.getRegisterBookList().size()).isEqualTo(1);
         Assertions.assertThat(responseDto.getRegisterBookList().get(0).getName()).isEqualTo("book1");
     }
@@ -93,7 +96,7 @@ public class UserServiceTest {
                 .build();
 
         String pw = passwordEncoder.encode("12345");
-        User createUser = User.createUser("kkk", pw, "kim");
+        User createUser = User.createUser("kkk", pw, "kim", "kim@naver.com");
 
         when(userUpdateQueryService.save(any())).thenReturn(createUser);
 
@@ -103,6 +106,7 @@ public class UserServiceTest {
         // then
         Assertions.assertThat(responseDto.getAccountId()).isEqualTo("kkk");
         Assertions.assertThat(responseDto.getName()).isEqualTo("kim");
+        Assertions.assertThat(responseDto.getEmail()).isEqualTo("kim@naver.com");
     }
 
     @Test
@@ -129,7 +133,7 @@ public class UserServiceTest {
     public void loginTest() {
         // give
         String pw = passwordEncoder.encode("12345");
-        User user = User.createUser("kkk", pw, "kim");
+        User user = User.createUser("kkk", pw, "kim", "kim@naver.com");
 
         when(userFindQueryService.findByAccountID(any())).thenReturn(user);
 
@@ -152,7 +156,7 @@ public class UserServiceTest {
     public void wrongPasswordExceptionTest() {
         // give
         String pw1 = passwordEncoder.encode("123");
-        User user = User.createUser("kkk", pw1, "kim");
+        User user = User.createUser("kkk", pw1, "kim", "kim@naver.com");
 
         when(userFindQueryService.findByAccountID(any())).thenReturn(user);
 

@@ -34,7 +34,7 @@ public class BookFindQueryServiceTest {
     @BeforeEach
     public void init() {
 
-        user = User.createTestUser(1L, "kim");
+        user = User.createTestUser(1L, "kim", "kim@gmail.com");
 
         addBookRequestDto = BookRequestDto.Add.builder()
                 .name("kim")
