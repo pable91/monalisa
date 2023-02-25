@@ -16,9 +16,12 @@ public class UserResponseDto {
 
         private String name;
 
+        private String email;
+
         public SignUp(User user) {
             this.accountId = user.getAccountID();
             this.name = user.getName();
+            this.email = user.getEmail();
         }
 
         public static SignUp of(final User user) {
@@ -29,11 +32,15 @@ public class UserResponseDto {
     @Getter
     public static class Profile {
         private String userName;
+        private String name;
+        private String email;
         private List<BookResponseDto> registerBookList;
 
         public Profile(User user) {
             this.userName = user.getName();
-            registerBookList = user.getBookList().stream()
+            this.name = user.getName();
+            this.email = user.getEmail();
+            registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }
@@ -54,7 +61,7 @@ public class UserResponseDto {
         public Login(String token, User user) {
             this.token = token;
             this.userName = user.getName();
-            registerBookList = user.getBookList().stream()
+            registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }

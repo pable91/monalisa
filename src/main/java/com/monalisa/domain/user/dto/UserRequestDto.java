@@ -21,6 +21,9 @@ public class UserRequestDto {
 
         @NotBlank
         private String name;
+
+        @NotBlank
+        private String email;
     }
 
     @Getter

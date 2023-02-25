@@ -17,17 +17,17 @@ class UserRequestDtoTest {
 
     static Stream<Arguments> arguments1() {
         return Stream.of(
-                Arguments.arguments("id1", "12345", "kim", 0),
-                Arguments.arguments("", "12345", "", 2),
-                Arguments.arguments("id1", "", "kim", 1),
-                Arguments.arguments(null, null, null, 3)
+                Arguments.arguments("id1", "12345", "kim", "kim@naver.com", 0),
+                Arguments.arguments("", "12345", "", "kim@naver.com", 2),
+                Arguments.arguments("id1", "", "kim", "kim@naver.com", 1),
+                Arguments.arguments(null, null, null, null, 4)
         );
     }
 
     @ParameterizedTest
     @MethodSource("arguments1")
     @DisplayName("signup 필드 검증 테스트")
-    public void signUpFieldValidationTest(String accountId, String pw, String name, int invalidCnt) {
+    public void signUpFieldValidationTest(String accountId, String pw, String name, String email, int invalidCnt) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -35,6 +35,7 @@ class UserRequestDtoTest {
                 .accountId(accountId)
                 .pw(pw)
                 .name(name)
+                .email(email)
                 .build();
 
         Set<ConstraintViolation<UserRequestDto.SignUp>> violations = validator.validate(signUpRequestDto);

@@ -1,6 +1,7 @@
 package com.monalisa.domain.user.domain;
 
 import com.monalisa.domain.book.domain.Book;
+import com.monalisa.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +30,11 @@ public class User {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @OneToMany(mappedBy = "user")
-    private List<Book> bookList = new ArrayList<>();
+    private List<Book> registerBooks = new ArrayList<>();
 
     private User(final String name) {
         this.name = name;
