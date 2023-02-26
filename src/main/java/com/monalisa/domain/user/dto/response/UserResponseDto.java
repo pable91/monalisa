@@ -3,6 +3,7 @@ package com.monalisa.domain.user.dto.response;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
+import com.monalisa.global.config.security.jwt.Token;
 import lombok.Getter;
 
 import java.util.List;
@@ -59,17 +60,19 @@ public class UserResponseDto {
 
         private List<BookResponseDto> registerBookList;
 
-        private String token;
+        private String accessToken;
+        private String refreshToken;
 
-        public Login(String token, User user) {
-            this.token = token;
+        public Login(Token token, User user) {
+            this.accessToken = token.getAccessToken();
+            this.refreshToken = token.getRefreshToken();
             this.userName = user.getName();
             registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }
 
-        public static Login from(String token, User user) {
+        public static Login from(Token token, User user) {
             return new Login(token, user);
         }
     }

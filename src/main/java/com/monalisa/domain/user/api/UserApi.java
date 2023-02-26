@@ -5,6 +5,7 @@ import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.service.UserService;
 import com.monalisa.global.config.security.jwt.JwtTokenProvider;
+import com.monalisa.global.config.security.jwt.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,10 +33,11 @@ public class UserApi {
     public ResponseEntity<UserResponseDto.Login> login(@RequestBody @Valid final UserRequestDto.Login loginUserDto) {
         User user = userService.login(loginUserDto);
 
-        String token = jwtTokenProvider.createToken(user.getAccountID());
+        Token token = jwtTokenProvider.createToken(user);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("JWT", token);
+        httpHeaders.add("ACCESS_TOKEN", token.getAccessToken());
+        httpHeaders.add("REFRESH_TOKEN", token.getRefreshToken());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
