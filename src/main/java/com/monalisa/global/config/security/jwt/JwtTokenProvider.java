@@ -1,6 +1,7 @@
 package com.monalisa.global.config.security.jwt;
 
 import com.monalisa.domain.user.domain.User;
+import com.monalisa.domain.user.exception.error.UserErrorCode;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -29,21 +32,20 @@ public class JwtTokenProvider {
 
     private final UserFindQueryService userFindQueryService;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.access_token_expire_time}")
     private Long accessTokenValidTime;
 
-    @Value("${jwt.refresh_token_expire_time}")
-    private Long refreshTokenValidTime;
-
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public Token createToken(final User user) {
+    public String createAccessToken(final User user) {
         Date now = new Date();
 
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -59,20 +61,7 @@ public class JwtTokenProvider {
                 .signWith(secretKey)
                 .compact();
 
-        String refreshToken = Jwts.builder()
-                .setHeaderParam("typ", "REFRESH_TOKEN")
-                .setHeaderParam("alg", "HS256")
-                .setSubject(user.getAccountID())
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
-                .claim("role", user.getRole().toString())
-                .signWith(secretKey)
-                .compact();
-
-        return Token.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return accessToken;
     }
 
     public String resolveToken(final HttpServletRequest request) {
@@ -102,10 +91,30 @@ public class JwtTokenProvider {
 
     public String getUserAccountId(final String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-//        return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("accountId");
     }
 
     public User getUserByToken(final String token) {
         return userFindQueryService.findByAccountID(getUserAccountId(token));
+    }
+
+    public RefreshToken createRefreshToken(final User user) {
+        RefreshToken refreshToken = new RefreshToken(UUID.randomUUID().toString(), user.getAccountID());
+
+        refreshTokenRepository.save(refreshToken);
+
+        return refreshToken;
+    }
+
+    public String recreateAccessToken(final String refreshToken, final User user) {
+        Optional<RefreshToken> resultToken = refreshTokenRepository.findById(refreshToken);
+
+        if (resultToken.isPresent() && isMyToken(user, resultToken)) {
+            return createAccessToken(user);
+        }
+        throw new InvalidRefreshTokenException(UserErrorCode.INVALID_REFRESH_TOKEN, UserErrorCode.INVALID_REFRESH_TOKEN.getMessage());
+    }
+
+    private boolean isMyToken(User user, Optional<RefreshToken> resultToken) {
+        return resultToken.get().getAccountId().equals(user.getAccountID());
     }
 }

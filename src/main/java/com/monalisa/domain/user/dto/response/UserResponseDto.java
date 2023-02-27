@@ -63,17 +63,17 @@ public class UserResponseDto {
         private String accessToken;
         private String refreshToken;
 
-        public Login(Token token, User user) {
-            this.accessToken = token.getAccessToken();
-            this.refreshToken = token.getRefreshToken();
+        public Login(String accessToken, String refreshToken, User user) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
             this.userName = user.getName();
             registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }
 
-        public static Login from(Token token, User user) {
-            return new Login(token, user);
+        public static Login from(String accessToken, String refreshToken, User user) {
+            return new Login(accessToken, refreshToken, user);
         }
     }
 }

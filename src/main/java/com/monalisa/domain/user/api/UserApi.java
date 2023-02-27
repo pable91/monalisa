@@ -5,7 +5,7 @@ import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.service.UserService;
 import com.monalisa.global.config.security.jwt.JwtTokenProvider;
-import com.monalisa.global.config.security.jwt.Token;
+import com.monalisa.global.config.security.jwt.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,16 +33,34 @@ public class UserApi {
     public ResponseEntity<UserResponseDto.Login> login(@RequestBody @Valid final UserRequestDto.Login loginUserDto) {
         User user = userService.login(loginUserDto);
 
-        Token token = jwtTokenProvider.createToken(user);
+        String accessToken = jwtTokenProvider.createAccessToken(user);
+        RefreshToken refreshToken = jwtTokenProvider.createRefreshToken(user);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("ACCESS_TOKEN", token.getAccessToken());
-        httpHeaders.add("REFRESH_TOKEN", token.getRefreshToken());
+        httpHeaders.add("ACCESS_TOKEN", accessToken);
+        httpHeaders.add("REFRESH_TOKEN", refreshToken.getRefreshToken());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .headers(httpHeaders)
-                .body(UserResponseDto.Login.from(token, user));
+                .body(UserResponseDto.Login.from(accessToken, refreshToken.getRefreshToken(), user));
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<String> refresh(@RequestHeader("REFRESH_TOKEN") final String refreshToken, @RequestParam("accountId") final String accountId) {
+        System.out.println("refresh => " + refreshToken);
+
+        User user = userService.findByAccountId(accountId);
+
+        String newAccessToken = jwtTokenProvider.recreateAccessToken(refreshToken, user);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("ACCESS_TOKEN", newAccessToken);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(httpHeaders)
+                .body(newAccessToken);
     }
 
     @GetMapping("/{userId}")

@@ -41,7 +41,7 @@ public class WebSecurityConfig  {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class) // UsernamePasswordAuthenticationFilter필터 동작 전에 JwtAuthenticationFilter 동작시키겠다.
                 .authorizeRequests()
-                .antMatchers("/user/signup", "/user/login").permitAll()
+                .antMatchers("/user/signup", "/user/login", "/user/refresh").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .anyRequest().authenticated()
 

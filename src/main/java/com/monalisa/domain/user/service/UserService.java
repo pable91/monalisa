@@ -54,4 +54,8 @@ public class UserService {
 
         return findUser;
     }
+
+    public User findByAccountId(final String accountId) {
+        return userFindQueryService.findByAccountID(accountId);
+    }
 }
