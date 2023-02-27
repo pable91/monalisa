@@ -50,7 +50,7 @@ public class Book {
         this.user = user;
         this.isSold = false;
 
-        user.getBookList().add(this);
+        user.getRegisterBooks().add(this);
     }
 
     public static Book registerBook(final BookRequestDto.Add addBookRequestDto, final User user) {

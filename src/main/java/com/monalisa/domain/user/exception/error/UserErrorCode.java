@@ -10,7 +10,8 @@ public enum UserErrorCode implements ErrorCode {
 
     USER_NOT_FOUND(400, "U001", "User Not Found!"),
     ALREADY_EXIST_USER(400, "U002", "Already User Exist"),
-    WRONG_PASSWORD(400, "U003", "Wrong Password");
+    WRONG_PASSWORD(400, "U003", "Wrong Password"),
+    INVALID_REFRESH_TOKEN(400, "U004", "Invalid Refresh token, Login Please");
 
     private final int status;
     private final String code;

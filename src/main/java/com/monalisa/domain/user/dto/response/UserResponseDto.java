@@ -1,7 +1,9 @@
 package com.monalisa.domain.user.dto.response;
 
 import com.monalisa.domain.book.dto.response.BookResponseDto;
+import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
+import com.monalisa.global.config.security.jwt.Token;
 import lombok.Getter;
 
 import java.util.List;
@@ -16,9 +18,12 @@ public class UserResponseDto {
 
         private String name;
 
+        private String email;
+
         public SignUp(User user) {
             this.accountId = user.getAccountID();
             this.name = user.getName();
+            this.email = user.getEmail();
         }
 
         public static SignUp of(final User user) {
@@ -29,11 +34,17 @@ public class UserResponseDto {
     @Getter
     public static class Profile {
         private String userName;
+        private String name;
+        private String email;
+        private Role role;
         private List<BookResponseDto> registerBookList;
 
         public Profile(User user) {
             this.userName = user.getName();
-            registerBookList = user.getBookList().stream()
+            this.name = user.getName();
+            this.email = user.getEmail();
+            this.role = user.getRole();
+            registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }
@@ -49,18 +60,20 @@ public class UserResponseDto {
 
         private List<BookResponseDto> registerBookList;
 
-        private String token;
+        private String accessToken;
+        private String refreshToken;
 
-        public Login(String token, User user) {
-            this.token = token;
+        public Login(String accessToken, String refreshToken, User user) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
             this.userName = user.getName();
-            registerBookList = user.getBookList().stream()
+            registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }
 
-        public static Login from(String token, User user) {
-            return new Login(token, user);
+        public static Login from(String accessToken, String refreshToken, User user) {
+            return new Login(accessToken, refreshToken, user);
         }
     }
 }
