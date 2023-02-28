@@ -1,6 +1,7 @@
 package com.monalisa.domain.order.domain;
 
 import com.monalisa.domain.book.domain.Book;
+import com.monalisa.domain.user.domain.User;
 import com.monalisa.global.domain.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,19 +22,25 @@ public class Order extends BaseTimeEntity {
     @Column(name = "order_id")
     private Long id;
 
+    @Column(name = "order_total_price")
     private Integer totalPrice;
 
     @OneToMany(mappedBy = "order")
     private List<Book> bookList = new ArrayList<>();
 
-    public Order(Book book) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id")
+    private User buyer;
+
+    public Order(final Book book, final User buyer) {
         this.totalPrice = book.getCost();
+        this.buyer = buyer;
         bookList.add(book);
         book.setOrder(this);
     }
 
-    public static Order createOrder(Book book) {
+    public static Order createOrder(final Book book, final User buyer) {
         book.setBuyState();
-        return new Order(book);
+        return new Order(book, buyer);
     }
 }

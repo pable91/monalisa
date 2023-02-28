@@ -29,7 +29,7 @@ public class OrderBuyService {
 
         validate(requestDto, targetBook);
 
-        Order order = Order.createOrder(targetBook);
+        Order order = Order.createOrder(targetBook, buyer);
         orderUpdateQueryService.save(order);
 
         return OrderResponseDto.of(targetBook, buyer.getName());
