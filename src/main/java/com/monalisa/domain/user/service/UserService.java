@@ -1,5 +1,6 @@
 package com.monalisa.domain.user.service;
 
+import com.monalisa.domain.order.domain.Order;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,5 +60,12 @@ public class UserService {
 
     public User findByAccountId(final String accountId) {
         return userFindQueryService.findByAccountID(accountId);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDto.OrderList findOrderList(final Long userId) {
+        List<Order> orderList = userFindQueryService.findOrderListByUserId(userId);
+
+        return new UserResponseDto.OrderList(orderList);
     }
 }
