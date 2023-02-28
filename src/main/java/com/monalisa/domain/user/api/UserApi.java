@@ -6,6 +6,7 @@ import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.service.UserService;
 import com.monalisa.global.config.security.jwt.JwtTokenProvider;
 import com.monalisa.global.config.security.jwt.RefreshToken;
+import com.monalisa.global.config.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,8 +50,6 @@ public class UserApi {
 
     @GetMapping("/refresh")
     public ResponseEntity<String> refresh(@RequestHeader("REFRESH_TOKEN") final String refreshToken, @RequestParam("accountId") final String accountId) {
-        System.out.println("refresh => " + refreshToken);
-
         User user = userService.findByAccountId(accountId);
 
         String newAccessToken = jwtTokenProvider.recreateAccessToken(refreshToken, user);
@@ -68,5 +68,18 @@ public class UserApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.profile(userId));
+    }
+
+    @GetMapping("/orderList")
+    public ResponseEntity findOrderList() {
+        Optional<User> currentUser = SecurityUtil.getCurrentUser();
+        User user = null;
+        if (currentUser.isPresent()) {
+            user = currentUser.get();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.findOrderList(user.getId()));
     }
 }

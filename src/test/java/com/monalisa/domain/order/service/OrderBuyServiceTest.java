@@ -74,7 +74,7 @@ class OrderBuyServiceTest {
         when(bookFindQueryService.findById(any())).thenReturn(book);
 
         // when
-        OrderResponseDto responseDto = orderBuyService.createOrder(requestDTO);
+        OrderResponseDto.Create responseDto = orderBuyService.createOrder(requestDTO);
 
         // then
         Assertions.assertThat(responseDto.getBuyerName()).isEqualTo("buyer");

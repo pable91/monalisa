@@ -23,7 +23,7 @@ public class OrderBuyService {
     private final UserFindQueryService userFindQueryService;
     private final BookFindQueryService bookFindQueryService;
 
-    public OrderResponseDto createOrder(final OrderRequestDto.Buy requestDto) {
+    public OrderResponseDto.Create createOrder(final OrderRequestDto.Buy requestDto) {
         final User buyer = userFindQueryService.findById(requestDto.getBuyerId());
         final Book targetBook = bookFindQueryService.findById(requestDto.getBookId());
 
@@ -32,7 +32,7 @@ public class OrderBuyService {
         Order order = Order.createOrder(targetBook, buyer);
         orderUpdateQueryService.save(order);
 
-        return OrderResponseDto.of(targetBook, buyer.getName());
+        return OrderResponseDto.Create.of(targetBook, buyer.getName());
     }
 
     private void validate(OrderRequestDto.Buy requestDto, Book book) {
