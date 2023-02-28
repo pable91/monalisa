@@ -1,4 +1,4 @@
-package com.monalisa.global.config.security.jwt;
+package com.monalisa.global.config.security.jwt.error.exception;
 
 import com.monalisa.global.error.errorcode.ErrorCode;
 import com.monalisa.global.error.exception.InvalidValueException;

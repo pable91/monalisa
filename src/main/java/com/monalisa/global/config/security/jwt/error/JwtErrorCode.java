@@ -1,4 +1,4 @@
-package com.monalisa.global.config.security.jwt;
+package com.monalisa.global.config.security.jwt.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

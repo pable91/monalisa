@@ -3,7 +3,6 @@ package com.monalisa.domain.user.dto.response;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
-import com.monalisa.global.config.security.jwt.Token;
 import lombok.Getter;
 
 import java.util.List;

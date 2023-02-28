@@ -1,7 +1,6 @@
 package com.monalisa.global.config.security.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.monalisa.global.config.security.jwt.exception.JwtAuthenticationEntryPoint;
+import com.monalisa.global.config.security.jwt.error.exception.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
