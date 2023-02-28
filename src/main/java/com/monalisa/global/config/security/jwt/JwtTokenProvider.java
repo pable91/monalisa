@@ -7,6 +7,7 @@ import com.monalisa.global.config.security.jwt.error.JwtErrorCode;
 import com.monalisa.global.config.security.jwt.error.exception.InvalidRefreshTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,9 +41,11 @@ public class JwtTokenProvider {
     @Value("${jwt.access_token_expire_time}")
     private Long accessTokenValidTime;
 
+    private Key key;
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String createAccessToken(final User user) {
@@ -77,8 +79,10 @@ public class JwtTokenProvider {
 
     public boolean validateToken(final String jwtToken, ServletRequest request) {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwtToken);
             return true;
+        } catch (MalformedJwtException e) {
+            request.setAttribute("ERROR_CODE", JwtErrorCode.INCORRECT);
         } catch(ExpiredJwtException ex) {
             request.setAttribute("ERROR_CODE", JwtErrorCode.EXPIRED);
         }
@@ -91,7 +95,7 @@ public class JwtTokenProvider {
     }
 
     public String getUserAccountId(final String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     public User getUserByToken(final String token) {
