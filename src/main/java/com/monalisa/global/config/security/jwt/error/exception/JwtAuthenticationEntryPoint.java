@@ -1,7 +1,7 @@
-package com.monalisa.global.config.security.jwt.exception;
+package com.monalisa.global.config.security.jwt.error.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.monalisa.global.config.security.jwt.JwtErrorCode;
+import com.monalisa.global.config.security.jwt.error.JwtErrorCode;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

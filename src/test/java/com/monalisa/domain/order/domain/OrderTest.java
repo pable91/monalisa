@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 public class OrderTest {
 
     private Book newBook;
+    private User buyer;
 
     @BeforeEach()
     public void before() {
@@ -22,18 +23,19 @@ public class OrderTest {
                 .userId(1L)
                 .build();
 
-        User user = User.createTestUser(1L, "kim", "kim@naver.com");
+        buyer = User.createTestUser(1L, "kim", "kim@naver.com");
 
-        newBook = Book.registerBook(addBookRequestDto, user);
+        newBook = Book.registerBook(addBookRequestDto, buyer);
     }
 
     @Test
     @DisplayName("주문 생성 테스트")
     public void createOrderTest() {
-        Order order = Order.createOrder(newBook);
+        Order order = Order.createOrder(newBook, buyer);
 
         Assertions.assertThat(order.getTotalPrice()).isEqualTo(10000);
         Assertions.assertThat(order.getBookList().size()).isEqualTo(1);
         Assertions.assertThat(newBook.isSold()).isEqualTo(true);
+        Assertions.assertThat(order.getBuyer().getName()).isEqualTo("kim");
     }
 }
