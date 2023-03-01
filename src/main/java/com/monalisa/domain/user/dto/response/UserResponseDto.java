@@ -1,10 +1,13 @@
 package com.monalisa.domain.user.dto.response;
 
 import com.monalisa.domain.book.dto.response.BookResponseDto;
+import com.monalisa.domain.order.domain.Order;
+import com.monalisa.domain.order.dto.response.OrderResponseDto;
 import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,13 +69,28 @@ public class UserResponseDto {
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
             this.userName = user.getName();
-            registerBookList = user.getRegisterBooks().stream()
+            this.registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }
 
         public static Login from(String accessToken, String refreshToken, User user) {
             return new Login(accessToken, refreshToken, user);
+        }
+    }
+
+    @Getter
+    public static class OrderList {
+        private List<OrderResponseDto.Find> orderList;
+
+        private OrderList(List<Order> orderList) {
+            this.orderList = orderList.stream()
+                    .map(order -> OrderResponseDto.Find.of(order))
+                    .collect(Collectors.toList());
+        }
+
+        public static OrderList of(List<Order> orderList) {
+            return new OrderList(orderList);
         }
     }
 }

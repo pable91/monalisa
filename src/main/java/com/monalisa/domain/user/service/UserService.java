@@ -66,6 +66,6 @@ public class UserService {
     public UserResponseDto.OrderList findOrderList(final Long userId) {
         List<Order> orderList = userFindQueryService.findOrderListByUserId(userId);
 
-        return new UserResponseDto.OrderList(orderList);
+        return UserResponseDto.OrderList.of(orderList);
     }
 }

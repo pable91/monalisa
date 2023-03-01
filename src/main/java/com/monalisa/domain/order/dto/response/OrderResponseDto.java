@@ -3,6 +3,7 @@ package com.monalisa.domain.order.dto.response;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.order.domain.Order;
+import com.monalisa.domain.user.domain.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -17,34 +18,55 @@ public class OrderResponseDto {
     private String buyerName;
 
     @Getter
-    public static class Create {
+    public static class CreateSingle {
         private String buyerName;
 
         private String sellerName;
 
-        private String name;
+        private String buyBookName;
 
         private Integer cost;
 
-        private Create(Book book) {
+        private CreateSingle(Book book) {
             this.sellerName = book.getUser().getName();
-            this.name = book.getName();
+            this.buyBookName = book.getName();
             this.cost = book.getCost();
         }
 
-        private Create(Book book, String buyerName) {
+        private CreateSingle(Book book, String buyerName) {
             this.buyerName = buyerName;
             this.sellerName = book.getUser().getName();
-            this.name = book.getName();
+            this.buyBookName = book.getName();
             this.cost = book.getCost();
         }
 
-        public static Create of(Book book) {
-            return new Create(book);
+        public static CreateSingle of(Book book) {
+            return new CreateSingle(book);
         }
 
-        public static Create of(Book book, String buyerName) {
-            return new Create(book, buyerName);
+        public static CreateSingle of(Book book, String buyerName) {
+            return new CreateSingle(book, buyerName);
+        }
+    }
+
+    @Getter
+    public static class CreateMulti {
+        private String buyerName;
+
+        private int buyBookNum;
+
+        private List<String> buyBookNames;
+
+        private CreateMulti(final List<Book> books, final User buyer) {
+            this.buyerName = buyer.getName();
+            this.buyBookNum = books.size();
+            this.buyBookNames = books.stream()
+                    .map(b -> b.getName())
+                    .collect(Collectors.toList());
+        }
+
+        public static CreateMulti of(final List<Book> books, final User buyer) {
+            return new CreateMulti(books, buyer);
         }
     }
 
@@ -57,7 +79,7 @@ public class OrderResponseDto {
         public Find(Order order) {
             this.totalPrice = order.getTotalPrice();
             this.orderDate = order.getCreatedDate();
-            bookList = order.getBookList().stream()
+            this.bookList = order.getBookList().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }

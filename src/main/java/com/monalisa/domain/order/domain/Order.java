@@ -32,15 +32,29 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "buyer_id")
     private User buyer;
 
-    public Order(final Book book, final User buyer) {
+    private Order(final Book book, final User buyer) {
         this.totalPrice = book.getCost();
         this.buyer = buyer;
         bookList.add(book);
         book.setOrder(this);
     }
 
-    public static Order createOrder(final Book book, final User buyer) {
+    private Order(final List<Book> books, final User buyer) {
+        this.totalPrice = books.stream().mapToInt(b -> b.getCost()).sum();
+        this.buyer = buyer;
+        books.stream().forEach(b -> {
+            this.bookList.add(b);
+            b.setOrder(this);
+        });
+    }
+
+    public static Order createOrderBySingleBook(final Book book, final User buyer) {
         book.setBuyState();
         return new Order(book, buyer);
+    }
+
+    public static Order createOrderByMultiBook(final List<Book> bookList, final User buyer) {
+        bookList.stream().forEach(b -> b.setBuyState());
+        return new Order(bookList, buyer);
     }
 }

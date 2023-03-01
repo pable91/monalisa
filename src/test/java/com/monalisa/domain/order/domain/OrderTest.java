@@ -31,7 +31,7 @@ public class OrderTest {
     @Test
     @DisplayName("주문 생성 테스트")
     public void createOrderTest() {
-        Order order = Order.createOrder(newBook, buyer);
+        Order order = Order.createOrderBySingleBook(newBook, buyer);
 
         Assertions.assertThat(order.getTotalPrice()).isEqualTo(10000);
         Assertions.assertThat(order.getBookList().size()).isEqualTo(1);

@@ -3,12 +3,17 @@ package com.monalisa.domain.book.repository;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     boolean existsByNameAndUser(String name, User user);
-//    Optional<Book> findByNameAndUser(String name, User user);
+
+    //    Optional<Book> findByNameAndUser(String name, User user);
+
+    @Query(value = "select b from Book b where b.id in :bookIds")
+    List<Book> findAllByIds(List<Long> bookIds);
 }

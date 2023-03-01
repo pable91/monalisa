@@ -71,7 +71,7 @@ public class UserApi {
     }
 
     @GetMapping("/orderList")
-    public ResponseEntity findOrderList() {
+    public ResponseEntity<UserResponseDto.OrderList> findOrderList() {
         Optional<User> currentUser = SecurityUtil.getCurrentUser();
         User user = null;
         if (currentUser.isPresent()) {

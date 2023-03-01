@@ -9,6 +9,8 @@ import com.monalisa.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookFindQueryService {
@@ -23,5 +25,9 @@ public class BookFindQueryService {
         return bookRepository.findById(bookId).orElseThrow(() -> {
             throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
         });
+    }
+
+    public List<Book> findAllByIds(final List<Long> bookIds) {
+        return bookRepository.findAllByIds(bookIds);
     }
 }
