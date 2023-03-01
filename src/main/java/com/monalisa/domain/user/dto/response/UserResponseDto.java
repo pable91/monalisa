@@ -46,7 +46,7 @@ public class UserResponseDto {
             this.name = user.getName();
             this.email = user.getEmail();
             this.role = user.getRole();
-            registerBookList = user.getRegisterBooks().stream()
+            this.registerBookList = user.getRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }

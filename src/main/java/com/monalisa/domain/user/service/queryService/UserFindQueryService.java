@@ -6,6 +6,7 @@ import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.exception.error.UserErrorCode;
 import com.monalisa.domain.user.repository.UserRepository;
+import com.monalisa.global.config.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -63,11 +63,11 @@ public class UserApi {
                 .body(newAccessToken);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto.Profile> profile(@PathVariable final Long userId) {
+    @GetMapping
+    public ResponseEntity<UserResponseDto.Profile> profile() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.profile(userId));
+                .body(userService.profile());
     }
 
     @GetMapping("/orderList")

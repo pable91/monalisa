@@ -5,10 +5,12 @@ import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.exception.AlreadyExistUserException;
+import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.exception.WrongPasswordException;
 import com.monalisa.domain.user.exception.error.UserErrorCode;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import com.monalisa.domain.user.service.queryService.UserUpdateQueryService;
+import com.monalisa.global.config.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserResponseDto.Profile profile(final Long userId) {
-        final User findUser = userFindQueryService.findById(userId);
+    public UserResponseDto.Profile profile() {
+        User user = SecurityUtil.getCurrentUser().get();
+
+        User findUser = userFindQueryService.findById(user.getId());
 
         return UserResponseDto.Profile.of(findUser);
     }
@@ -36,7 +40,7 @@ public class UserService {
     public UserResponseDto.SignUp signup(final UserRequestDto.SignUp signupUserDto) {
         String accountId = signupUserDto.getAccountId();
 
-        if(userFindQueryService.existByAccountId(accountId)) {
+        if (userFindQueryService.existByAccountId(accountId)) {
             throw new AlreadyExistUserException(UserErrorCode.ALREADY_EXIST_USER, accountId);
         }
 
@@ -51,7 +55,7 @@ public class UserService {
 
         User findUser = userFindQueryService.findByAccountID(accountId);
 
-        if(!passwordEncoder.matches(loginUserDto.getPw(), findUser.getPw())) {
+        if (!passwordEncoder.matches(loginUserDto.getPw(), findUser.getPw())) {
             throw new WrongPasswordException(UserErrorCode.WRONG_PASSWORD, loginUserDto.getPw());
         }
 
