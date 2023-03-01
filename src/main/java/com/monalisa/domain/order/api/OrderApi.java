@@ -17,12 +17,18 @@ public class OrderApi {
 
     private final OrderBuyService orderBuyService;
 
-    @PostMapping
-    public ResponseEntity<OrderResponseDto.Create> buyBook(@RequestBody @Valid final OrderRequestDto.Buy requestDto) {
+    @PostMapping("/single-book")
+    public ResponseEntity<OrderResponseDto.CreateSingle> buyBook(@RequestBody @Valid final OrderRequestDto.SingleBook requestDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(orderBuyService.createOrder(requestDto));
+                .body(orderBuyService.createOrderBySingleBook(requestDto));
     }
 
+    @PostMapping("/multi-book")
+    public ResponseEntity<OrderResponseDto.CreateMulti> buyBooks(@RequestBody final OrderRequestDto.MultiBook requestDto) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderBuyService.createOrderByMultiBook(requestDto));
+    }
 
 }

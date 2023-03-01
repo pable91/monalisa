@@ -39,8 +39,23 @@ public class Order extends BaseTimeEntity {
         book.setOrder(this);
     }
 
-    public static Order createOrder(final Book book, final User buyer) {
+    public Order(final List<Book> books, final User buyer) {
+        this.totalPrice = books.stream().mapToInt(b -> b.getCost()).sum();
+        this.buyer = buyer;
+        books.stream().forEach(b ->
+        {
+            this.bookList.add(b);
+            b.setOrder(this);
+        });
+    }
+
+    public static Order createOrderBySingleBook(final Book book, final User buyer) {
         book.setBuyState();
         return new Order(book, buyer);
+    }
+
+    public static Order createOrderByMultiBook(final List<Book> bookList, final User buyer) {
+        bookList.stream().forEach(b -> b.setBuyState());
+        return new Order(bookList, buyer);
     }
 }

@@ -32,13 +32,13 @@ class OrderRequestDtoTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        OrderRequestDto.Buy orderRequestDto  = OrderRequestDto.Buy.builder()
+        OrderRequestDto.SingleBook orderRequestDto  = OrderRequestDto.SingleBook.builder()
                 .bookId(bookId)
                 .buyerId(userId)
                 .build();
 
 
-        Set<ConstraintViolation<OrderRequestDto.Buy>> violations = validator.validate(orderRequestDto);
+        Set<ConstraintViolation<OrderRequestDto.SingleBook>> violations = validator.validate(orderRequestDto);
         Assertions.assertThat(violations.size()).isEqualTo(invalidCnt);
     }
 }

@@ -9,7 +9,6 @@ import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import com.monalisa.domain.order.dto.request.OrderRequestDto;
 import com.monalisa.domain.order.dto.response.OrderResponseDto;
 import com.monalisa.domain.user.domain.User;
-import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import org.assertj.core.api.Assertions;
@@ -25,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderBuyServiceTest {
+class OrderSingleBookServiceTest {
 
     @InjectMocks
     private OrderBuyService orderBuyService;
@@ -42,7 +41,7 @@ class OrderBuyServiceTest {
     private User seller;
     private User buyer;
     private Book book;
-    private OrderRequestDto.Buy requestDTO;
+    private OrderRequestDto.SingleBook requestDTO;
 
     @BeforeEach
     public void init() {
@@ -60,7 +59,7 @@ class OrderBuyServiceTest {
 
         book = Book.registerBook(addBookRequestDto, seller);
 
-        requestDTO = OrderRequestDto.Buy.builder()
+        requestDTO = OrderRequestDto.SingleBook.builder()
                 .buyerId(2L)
                 .bookId(1L)
                 .build();
@@ -74,12 +73,12 @@ class OrderBuyServiceTest {
         when(bookFindQueryService.findById(any())).thenReturn(book);
 
         // when
-        OrderResponseDto.Create responseDto = orderBuyService.createOrder(requestDTO);
+        OrderResponseDto.CreateSingle responseDto = orderBuyService.createOrderBySingleBook(requestDTO);
 
         // then
         Assertions.assertThat(responseDto.getBuyerName()).isEqualTo("buyer");
         Assertions.assertThat(responseDto.getSellerName()).isEqualTo("seller");
-        Assertions.assertThat(responseDto.getName()).isEqualTo("book1");
+        Assertions.assertThat(responseDto.getBuyBookName()).isEqualTo("book1");
         Assertions.assertThat(responseDto.getCost()).isEqualTo(1000);
     }
 
@@ -91,7 +90,7 @@ class OrderBuyServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> {
-             orderBuyService.createOrder(requestDTO);
+             orderBuyService.createOrderBySingleBook(requestDTO);
         });
     }
 
@@ -103,7 +102,7 @@ class OrderBuyServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(NotFoundBookException.class, () -> {
-            orderBuyService.createOrder(requestDTO);
+            orderBuyService.createOrderBySingleBook(requestDTO);
         });
     }
 
@@ -114,14 +113,14 @@ class OrderBuyServiceTest {
         when(userFindQueryService.findById(any())).thenReturn(seller);
         when(bookFindQueryService.findById(any())).thenReturn(book);
 
-        OrderRequestDto.Buy dto = OrderRequestDto.Buy.builder()
+        OrderRequestDto.SingleBook dto = OrderRequestDto.SingleBook.builder()
                 .buyerId(1L)
                 .bookId(1L)
                 .build();
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BuyNotMyBookException.class, () -> {
-            orderBuyService.createOrder(dto);
+            orderBuyService.createOrderBySingleBook(dto);
         });
     }
 
@@ -135,7 +134,7 @@ class OrderBuyServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BookAlreadySoldException.class, () -> {
-            orderBuyService.createOrder(requestDTO);
+            orderBuyService.createOrderBySingleBook(requestDTO);
         });
     }
 }
