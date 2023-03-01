@@ -32,18 +32,17 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "buyer_id")
     private User buyer;
 
-    public Order(final Book book, final User buyer) {
+    private Order(final Book book, final User buyer) {
         this.totalPrice = book.getCost();
         this.buyer = buyer;
         bookList.add(book);
         book.setOrder(this);
     }
 
-    public Order(final List<Book> books, final User buyer) {
+    private Order(final List<Book> books, final User buyer) {
         this.totalPrice = books.stream().mapToInt(b -> b.getCost()).sum();
         this.buyer = buyer;
-        books.stream().forEach(b ->
-        {
+        books.stream().forEach(b -> {
             this.bookList.add(b);
             b.setOrder(this);
         });

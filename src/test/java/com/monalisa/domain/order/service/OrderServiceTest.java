@@ -6,6 +6,7 @@ import com.monalisa.domain.book.exception.BookAlreadySoldException;
 import com.monalisa.domain.book.exception.BuyNotMyBookException;
 import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.service.queryService.BookFindQueryService;
+import com.monalisa.domain.order.domain.Order;
 import com.monalisa.domain.order.dto.request.OrderRequestDto;
 import com.monalisa.domain.order.dto.response.OrderResponseDto;
 import com.monalisa.domain.user.domain.User;
@@ -19,12 +20,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderSingleBookServiceTest {
+class OrderServiceTest {
 
     @InjectMocks
     private OrderBuyService orderBuyService;
@@ -40,7 +47,9 @@ class OrderSingleBookServiceTest {
 
     private User seller;
     private User buyer;
-    private Book book;
+    private Book book1;
+    private Book book2;
+    private Book book3;
     private OrderRequestDto.SingleBook requestDTO;
 
     @BeforeEach
@@ -49,7 +58,7 @@ class OrderSingleBookServiceTest {
 
         buyer = User.createTestUser(2L, "buyer", "kim@naver.com");
 
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
+        BookRequestDto.Add addBookRequestDto1 = BookRequestDto.Add.builder()
                 .name("book1")
                 .desc("desc")
                 .cost(1000)
@@ -57,20 +66,43 @@ class OrderSingleBookServiceTest {
                 .userId(1L)
                 .build();
 
-        book = Book.registerBook(addBookRequestDto, seller);
+        BookRequestDto.Add addBookRequestDto2 = BookRequestDto.Add.builder()
+                .name("book2")
+                .desc("desc")
+                .cost(100000)
+                .author("author")
+                .userId(1L)
+                .build();
+
+        BookRequestDto.Add addBookRequestDto3 = BookRequestDto.Add.builder()
+                .name("book3")
+                .desc("desc")
+                .cost(500)
+                .author("author")
+                .userId(1L)
+                .build();
+
+        book1 = Book.registerBook(addBookRequestDto1, seller);
+        book2 = Book.registerBook(addBookRequestDto2, seller);
+        book3 = Book.registerBook(addBookRequestDto3, seller);
 
         requestDTO = OrderRequestDto.SingleBook.builder()
                 .buyerId(2L)
                 .bookId(1L)
                 .build();
+
+        ////////////////////////
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(buyer, "", null));
     }
 
     @Test
-    @DisplayName("주문 생성 테스트")
-    public void createOrderTest() {
+    @DisplayName("한권의 책만 주문하는 테스트")
+    public void createOrderSingleBookTest() {
         // give
         when(userFindQueryService.findById(any())).thenReturn(buyer);
-        when(bookFindQueryService.findById(any())).thenReturn(book);
+        when(bookFindQueryService.findById(any())).thenReturn(book1);
 
         // when
         OrderResponseDto.CreateSingle responseDto = orderBuyService.createOrderBySingleBook(requestDTO);
@@ -111,7 +143,7 @@ class OrderSingleBookServiceTest {
     public void buyNotMyBookExceptionTest() {
         // give
         when(userFindQueryService.findById(any())).thenReturn(seller);
-        when(bookFindQueryService.findById(any())).thenReturn(book);
+        when(bookFindQueryService.findById(any())).thenReturn(book1);
 
         OrderRequestDto.SingleBook dto = OrderRequestDto.SingleBook.builder()
                 .buyerId(1L)
@@ -129,12 +161,38 @@ class OrderSingleBookServiceTest {
     public void bookAlreadySoldExceptionTest() {
         // give
         when(userFindQueryService.findById(any())).thenReturn(buyer);
-        when(bookFindQueryService.findById(any())).thenReturn(book);
-        book.setBuyState();
+        when(bookFindQueryService.findById(any())).thenReturn(book1);
+        book1.setBuyState();
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BookAlreadySoldException.class, () -> {
             orderBuyService.createOrderBySingleBook(requestDTO);
         });
+    }
+
+    @Test
+    @DisplayName("여러 책을 주문하는 테스트")
+    public void createOrderMultiBookTest() {
+        // give
+        List<Book> findBooks = List.of(
+                book1,
+                book2,
+                book3
+        );
+
+        Order order = Order.createOrderByMultiBook(findBooks, buyer);
+
+        when(bookFindQueryService.findAllByIds(any())).thenReturn(findBooks);
+        when(orderUpdateQueryService.save(any())).thenReturn(order);
+
+        OrderRequestDto.MultiBook orderRequest = OrderRequestDto.MultiBook.builder()
+                .bookIds(List.of(1L,2L,3L)).build();
+
+        // when
+        OrderResponseDto.CreateMulti response = orderBuyService.createOrderByMultiBook(orderRequest);
+
+        // then
+        Assertions.assertThat(response.getBuyBookNum()).isEqualTo(3);
+        Assertions.assertThat(response.getBuyBookNames()).isEqualTo(List.of("book1", "book2", "book3"));
     }
 }

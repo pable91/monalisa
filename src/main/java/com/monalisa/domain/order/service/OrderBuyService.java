@@ -57,7 +57,6 @@ public class OrderBuyService {
 
         // TODO 만약 없는 책을 구입하려 한다면?
 
-
         // 판매 책은 제외
         final List<Book> bookListByNotSold = bookList.stream()
                 .filter(b -> !b.isSold())
