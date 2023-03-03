@@ -18,23 +18,19 @@ class OrderRequestDtoTest {
 
     static Stream<Arguments> arguments1() {
         return Stream.of(
-                Arguments.arguments(1L, 0L, 1),
-                Arguments.arguments(-100L, 2L, 1),
-                Arguments.arguments(100L, 100L, 0),
-                Arguments.arguments(-100L, -1323L, 2)
-        );
+                Arguments.arguments(1L, 0),
+                Arguments.arguments(-100L, 1));
     }
 
     @ParameterizedTest
     @MethodSource("arguments1")
     @DisplayName("OrderRequestDTO Buy 필드 검증 테스트")
-    public void orderDTOFieldValidationTest(Long bookId, Long userId, int invalidCnt) {
+    public void orderDTOFieldValidationTest(Long bookId, int invalidCnt) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         OrderRequestDto.SingleBook orderRequestDto  = OrderRequestDto.SingleBook.builder()
                 .bookId(bookId)
-                .buyerId(userId)
                 .build();
 
 

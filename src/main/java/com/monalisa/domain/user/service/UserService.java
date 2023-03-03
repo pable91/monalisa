@@ -27,8 +27,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserResponseDto.Profile profile(final Long userId) {
-        final User findUser = userFindQueryService.findById(userId);
+    public UserResponseDto.Profile profile(final User user) {
+
+        User findUser = userFindQueryService.findById(user.getId());
 
         return UserResponseDto.Profile.of(findUser);
     }
@@ -36,7 +37,7 @@ public class UserService {
     public UserResponseDto.SignUp signup(final UserRequestDto.SignUp signupUserDto) {
         String accountId = signupUserDto.getAccountId();
 
-        if(userFindQueryService.existByAccountId(accountId)) {
+        if (userFindQueryService.existByAccountId(accountId)) {
             throw new AlreadyExistUserException(UserErrorCode.ALREADY_EXIST_USER, accountId);
         }
 
@@ -51,7 +52,7 @@ public class UserService {
 
         User findUser = userFindQueryService.findByAccountID(accountId);
 
-        if(!passwordEncoder.matches(loginUserDto.getPw(), findUser.getPw())) {
+        if (!passwordEncoder.matches(loginUserDto.getPw(), findUser.getPw())) {
             throw new WrongPasswordException(UserErrorCode.WRONG_PASSWORD, loginUserDto.getPw());
         }
 

@@ -40,7 +40,6 @@ public class BookFindServiceTest {
                 .desc("desc")
                 .cost(1000)
                 .author("author")
-                .userId(1L)
                 .build();
     }
 

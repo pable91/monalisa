@@ -4,6 +4,7 @@ import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.order.domain.Order;
 import com.monalisa.domain.user.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@AllArgsConstructor
 public class OrderResponseDto {
 
     private Integer totalPrice;

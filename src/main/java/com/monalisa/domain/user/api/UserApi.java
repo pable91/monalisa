@@ -4,9 +4,9 @@ import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.service.UserService;
+import com.monalisa.global.LoginUser;
 import com.monalisa.global.config.security.jwt.JwtTokenProvider;
 import com.monalisa.global.config.security.jwt.RefreshToken;
-import com.monalisa.global.config.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,21 +62,15 @@ public class UserApi {
                 .body(newAccessToken);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto.Profile> profile(@PathVariable final Long userId) {
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponseDto.Profile> profile(@LoginUser final User user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.profile(userId));
+                .body(userService.profile(user));
     }
 
     @GetMapping("/orderList")
-    public ResponseEntity<UserResponseDto.OrderList> findOrderList() {
-        Optional<User> currentUser = SecurityUtil.getCurrentUser();
-        User user = null;
-        if (currentUser.isPresent()) {
-            user = currentUser.get();
-        }
-
+    public ResponseEntity<UserResponseDto.OrderList> findMyOrderList(@LoginUser final User user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.findOrderList(user.getId()));

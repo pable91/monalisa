@@ -20,7 +20,6 @@ public class OrderTest {
                 .desc("desc1")
                 .cost(10000)
                 .author("author1")
-                .userId(1L)
                 .build();
 
         buyer = User.createTestUser(1L, "kim", "kim@naver.com");

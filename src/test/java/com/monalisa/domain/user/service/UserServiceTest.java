@@ -20,6 +20,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -52,10 +55,14 @@ public class UserServiceTest {
                 .desc("desc")
                 .cost(1000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         Book book = Book.registerBook(addBookRequestDto, user);
+
+        //////////////////
+
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, "", null));
     }
 
     @Test
@@ -63,7 +70,7 @@ public class UserServiceTest {
     public void profile() {
         when(userFindQueryService.findById(any())).thenReturn(user);
 
-        UserResponseDto.Profile responseDto = userService.profile(1L);
+        UserResponseDto.Profile responseDto = userService.profile(user);
 
         Assertions.assertThat(responseDto.getUserName()).isEqualTo("kim");
         Assertions.assertThat(responseDto.getEmail()).isEqualTo("kim@naver.com");
@@ -78,7 +85,7 @@ public class UserServiceTest {
         when(userFindQueryService.findById(any())).thenThrow(UserNotFoundException.class);
 
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, ()->{
-            userService.profile(1L);
+            userService.profile(user);
         });
     }
 

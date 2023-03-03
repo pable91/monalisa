@@ -20,10 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -63,7 +59,6 @@ class OrderServiceTest {
                 .desc("desc")
                 .cost(1000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         BookRequestDto.Add addBookRequestDto2 = BookRequestDto.Add.builder()
@@ -71,7 +66,6 @@ class OrderServiceTest {
                 .desc("desc")
                 .cost(100000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         BookRequestDto.Add addBookRequestDto3 = BookRequestDto.Add.builder()
@@ -79,7 +73,6 @@ class OrderServiceTest {
                 .desc("desc")
                 .cost(500)
                 .author("author")
-                .userId(1L)
                 .build();
 
         book1 = Book.registerBook(addBookRequestDto1, seller);
@@ -87,14 +80,13 @@ class OrderServiceTest {
         book3 = Book.registerBook(addBookRequestDto3, seller);
 
         requestDTO = OrderRequestDto.SingleBook.builder()
-                .buyerId(2L)
                 .bookId(1L)
                 .build();
 
         ////////////////////////
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(buyer, "", null));
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        context.setAuthentication(new UsernamePasswordAuthenticationToken(buyer, "", null));
     }
 
     @Test
@@ -105,7 +97,7 @@ class OrderServiceTest {
         when(bookFindQueryService.findById(any())).thenReturn(book1);
 
         // when
-        OrderResponseDto.CreateSingle responseDto = orderBuyService.createOrderBySingleBook(requestDTO);
+        OrderResponseDto.CreateSingle responseDto = orderBuyService.createOrderBySingleBook(requestDTO, buyer);
 
         // then
         Assertions.assertThat(responseDto.getBuyerName()).isEqualTo("buyer");
@@ -122,7 +114,7 @@ class OrderServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> {
-             orderBuyService.createOrderBySingleBook(requestDTO);
+             orderBuyService.createOrderBySingleBook(requestDTO, buyer);
         });
     }
 
@@ -134,7 +126,7 @@ class OrderServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(NotFoundBookException.class, () -> {
-            orderBuyService.createOrderBySingleBook(requestDTO);
+            orderBuyService.createOrderBySingleBook(requestDTO, buyer);
         });
     }
 
@@ -146,13 +138,12 @@ class OrderServiceTest {
         when(bookFindQueryService.findById(any())).thenReturn(book1);
 
         OrderRequestDto.SingleBook dto = OrderRequestDto.SingleBook.builder()
-                .buyerId(1L)
                 .bookId(1L)
                 .build();
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BuyNotMyBookException.class, () -> {
-            orderBuyService.createOrderBySingleBook(dto);
+            orderBuyService.createOrderBySingleBook(dto, buyer);
         });
     }
 
@@ -166,7 +157,7 @@ class OrderServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BookAlreadySoldException.class, () -> {
-            orderBuyService.createOrderBySingleBook(requestDTO);
+            orderBuyService.createOrderBySingleBook(requestDTO, buyer);
         });
     }
 
@@ -189,7 +180,7 @@ class OrderServiceTest {
                 .bookIds(List.of(1L,2L,3L)).build();
 
         // when
-        OrderResponseDto.CreateMulti response = orderBuyService.createOrderByMultiBook(orderRequest);
+        OrderResponseDto.CreateMulti response = orderBuyService.createOrderByMultiBook(orderRequest, buyer);
 
         // then
         Assertions.assertThat(response.getBuyBookNum()).isEqualTo(3);
