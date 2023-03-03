@@ -1,10 +1,9 @@
 package com.monalisa.domain.order.dto.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -12,21 +11,22 @@ public class OrderRequestDto {
 
     @Getter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SingleBook {
 
         @Min(1)
         private Long bookId;
-
-        @Min(1)
-        private Long buyerId;
     }
 
     @Getter
     @Builder
-    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MultiBook {
 
-        @NotEmpty
+        @NotBlank
         private List<Long> bookIds;
+
     }
 }

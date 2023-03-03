@@ -10,13 +10,11 @@ import com.monalisa.domain.order.dto.request.OrderRequestDto;
 import com.monalisa.domain.order.dto.response.OrderResponseDto;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
-import com.monalisa.global.config.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,11 +26,11 @@ public class OrderBuyService {
     private final UserFindQueryService userFindQueryService;
     private final BookFindQueryService bookFindQueryService;
 
-    public OrderResponseDto.CreateSingle createOrderBySingleBook(final OrderRequestDto.SingleBook requestDto) {
-        final User buyer = userFindQueryService.findById(requestDto.getBuyerId());
+    public OrderResponseDto.CreateSingle createOrderBySingleBook(final OrderRequestDto.SingleBook requestDto, final User user) {
+        final User buyer = userFindQueryService.findById(user.getId());
         final Book targetBook = bookFindQueryService.findById(requestDto.getBookId());
 
-        validate(requestDto, targetBook);
+        validate(buyer, requestDto, targetBook);
 
         Order order = Order.createOrderBySingleBook(targetBook, buyer);
         orderUpdateQueryService.save(order);
@@ -40,8 +38,8 @@ public class OrderBuyService {
         return OrderResponseDto.CreateSingle.of(targetBook, buyer.getName());
     }
 
-    private void validate(OrderRequestDto.SingleBook requestDto, Book book) {
-        if (book.isMine(requestDto.getBuyerId())) {
+    private void validate(final User buyer, final OrderRequestDto.SingleBook requestDto, final Book book) {
+        if (book.isMine(buyer.getId())) {
             throw new BuyNotMyBookException(BookErrorCode.BUY_NOT_MY_BOOK, requestDto.getBookId());
         }
 
@@ -50,10 +48,8 @@ public class OrderBuyService {
         }
     }
 
-    public OrderResponseDto.CreateMulti createOrderByMultiBook(final OrderRequestDto.MultiBook requestDto) {
+    public OrderResponseDto.CreateMulti createOrderByMultiBook(final OrderRequestDto.MultiBook requestDto, final User buyer) {
         final List<Book> bookList = bookFindQueryService.findAllByIds(requestDto.getBookIds());
-        final Optional<User> currentUser = SecurityUtil.getCurrentUser();
-        final User buyer = currentUser.get();
 
         // TODO 만약 없는 책을 구입하려 한다면?
 
