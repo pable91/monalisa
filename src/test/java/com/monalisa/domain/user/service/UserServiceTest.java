@@ -62,8 +62,8 @@ public class UserServiceTest {
 
         //////////////////
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, "", null));
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, "", null));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class UserServiceTest {
     public void profile() {
         when(userFindQueryService.findById(any())).thenReturn(user);
 
-        UserResponseDto.Profile responseDto = userService.profile();
+        UserResponseDto.Profile responseDto = userService.profile(user);
 
         Assertions.assertThat(responseDto.getUserName()).isEqualTo("kim");
         Assertions.assertThat(responseDto.getEmail()).isEqualTo("kim@naver.com");
@@ -86,7 +86,7 @@ public class UserServiceTest {
         when(userFindQueryService.findById(any())).thenThrow(UserNotFoundException.class);
 
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, ()->{
-            userService.profile();
+            userService.profile(user);
         });
     }
 

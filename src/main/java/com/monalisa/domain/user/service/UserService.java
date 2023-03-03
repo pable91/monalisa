@@ -5,12 +5,10 @@ import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
 import com.monalisa.domain.user.exception.AlreadyExistUserException;
-import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.exception.WrongPasswordException;
 import com.monalisa.domain.user.exception.error.UserErrorCode;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import com.monalisa.domain.user.service.queryService.UserUpdateQueryService;
-import com.monalisa.global.config.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,8 +27,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserResponseDto.Profile profile() {
-        User user = SecurityUtil.getCurrentUser().get();
+    public UserResponseDto.Profile profile(final User user) {
 
         User findUser = userFindQueryService.findById(user.getId());
 
