@@ -9,7 +9,6 @@ import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import com.monalisa.domain.book.service.queryService.BookUpdateQueryService;
 import com.monalisa.domain.user.domain.User;
-import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.exception.UserNotFoundException;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import org.assertj.core.api.Assertions;
@@ -52,11 +51,9 @@ class BookUpdateServiceTest {
                 .desc("desc")
                 .cost(1000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         updateBookRequestDto = BookRequestDto.Update.builder()
-                .userId(1L)
                 .bookId(1L)
                 .name("update name")
                 .desc("update desc")
@@ -76,7 +73,7 @@ class BookUpdateServiceTest {
 //                .save(any(Book.class));
 
         // when
-        BookResponseDto bookResponseDto = bookUpdateService.registerBook(addBookRequestDto);
+        BookResponseDto bookResponseDto = bookUpdateService.registerBook(addBookRequestDto, user);
 
         // then
         Assertions.assertThat(bookResponseDto.getName()).isEqualTo("kim");
@@ -93,7 +90,7 @@ class BookUpdateServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> {
-            bookUpdateService.registerBook(addBookRequestDto);
+            bookUpdateService.registerBook(addBookRequestDto, user);
         });
     }
 
@@ -109,7 +106,7 @@ class BookUpdateServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(BookAlreadyRegisterException.class, () -> {
-            bookUpdateService.registerBook(addBookRequestDto);
+            bookUpdateService.registerBook(addBookRequestDto, user);
         });
     }
 
@@ -122,7 +119,7 @@ class BookUpdateServiceTest {
         when(bookFindQueryService.findById(any())).thenReturn(book);
 
         // when
-        BookResponseDto bookResponseDto = bookUpdateService.updateBook(updateBookRequestDto);
+        BookResponseDto bookResponseDto = bookUpdateService.updateBook(updateBookRequestDto, user);
 
         // then
         Assertions.assertThat(bookResponseDto.getName()).isEqualTo("update name");
@@ -140,7 +137,7 @@ class BookUpdateServiceTest {
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(NotFoundBookException.class, () -> {
-            bookUpdateService.updateBook(updateBookRequestDto);
+            bookUpdateService.updateBook(updateBookRequestDto, user);
         });
     }
 
@@ -151,7 +148,6 @@ class BookUpdateServiceTest {
         Book book = Book.registerBook(addBookRequestDto, user);
 
         BookRequestDto.Update notEqualUserIdUpdateDto = BookRequestDto.Update.builder()
-                .userId(2L)
                 .bookId(1L)
                 .name("update name")
                 .desc("update desc")
@@ -159,11 +155,13 @@ class BookUpdateServiceTest {
                 .author("update author")
                 .build();
 
+        User anotherUser = User.createTestUser(5L, "lee", "lee@naver.com");
+
         when(bookFindQueryService.findById(any())).thenReturn(book);
 
         // when, then
         org.junit.jupiter.api.Assertions.assertThrows(IsNotMyBookException.class, () -> {
-            bookUpdateService.updateBook(notEqualUserIdUpdateDto);
+            bookUpdateService.updateBook(notEqualUserIdUpdateDto, anotherUser);
         });
     }
 

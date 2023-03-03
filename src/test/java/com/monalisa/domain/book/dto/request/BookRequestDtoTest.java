@@ -17,12 +17,11 @@ class BookRequestDtoTest {
 
     static Stream<Arguments> arguments1() {
         return Stream.of(
-                Arguments.arguments("name1", "desc1", 10000, "author1", 1L, 0),
-                Arguments.arguments("", "desc1", 1000, "author1", 1L, 1),
-                Arguments.arguments("", "desc1", 10, "author1", 1L, 2),
-                Arguments.arguments("", "", 10, "", 1L, 3),
-                Arguments.arguments("", "", 10, "", 0L, 4),
-                Arguments.arguments("", "", 100, "author1", 1L, 2)
+                Arguments.arguments("name1", "desc1", 10000, "author1", 0),
+                Arguments.arguments("", "desc1", 1000, "author1", 1),
+                Arguments.arguments("", "desc1", 10, "author1", 2),
+                Arguments.arguments("", "", 10, "", 3),
+                Arguments.arguments("", "", 100, "author1", 2)
 
         );
     }
@@ -30,7 +29,7 @@ class BookRequestDtoTest {
     @ParameterizedTest
     @MethodSource("arguments1")
     @DisplayName("Add 필드 검증 테스트")
-    public void addDtoFieldValidationTest(String name, String desc, Integer cost, String author, Long userId, int invalidCnt) {
+    public void addDtoFieldValidationTest(String name, String desc, Integer cost, String author, int invalidCnt) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -39,7 +38,6 @@ class BookRequestDtoTest {
                 .desc(desc)
                 .cost(cost)
                 .author(author)
-                .userId(userId)
                 .build();
 
         Set<ConstraintViolation<BookRequestDto.Add>> violations = validator.validate(addBookRequestDto);
@@ -48,13 +46,13 @@ class BookRequestDtoTest {
 
     static Stream<Arguments> arguments2() {
         return Stream.of(
-                Arguments.arguments("name1", "desc1", 10000, "author1", 1L, 1L, 0),
-                Arguments.arguments("", "desc1", 1000, "author1", 1L, 1L, 1),
-                Arguments.arguments("", "desc1", 10, "author1", 1L, 1L, 2),
-                Arguments.arguments("", "", 10, "", 1L, 1L, 3),
-                Arguments.arguments("", "", 10, "", 0L, 1L, 4),
-                Arguments.arguments("", "", 10, "", 0L, 0L, 5),
-                Arguments.arguments("", "", 100, "author1", 1L, 1L, 2)
+                Arguments.arguments("name1", "desc1", 10000, "author1", 1L, 0),
+                Arguments.arguments("", "desc1", 1000, "author1", 1L, 1),
+                Arguments.arguments("", "desc1", 10, "author1", 1L, 2),
+                Arguments.arguments("", "", 10, "", 1L, 3),
+                Arguments.arguments("", "", 10, "", 1L, 3),
+                Arguments.arguments("", "", 10, "", 0L, 4),
+                Arguments.arguments("", "", 100, "author1", 1L, 2)
 
         );
     }
@@ -62,7 +60,7 @@ class BookRequestDtoTest {
     @ParameterizedTest
     @MethodSource("arguments2")
     @DisplayName("Update 필드 검증 테스트")
-    public void updateDtoFieldValidationTest(String name, String desc, Integer cost, String author, Long userId, Long bookId, int invalidCnt) {
+    public void updateDtoFieldValidationTest(String name, String desc, Integer cost, String author, Long bookId, int invalidCnt) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -71,7 +69,6 @@ class BookRequestDtoTest {
                 .desc(desc)
                 .cost(cost)
                 .author(author)
-                .userId(userId)
                 .bookId(bookId)
                 .build();
 

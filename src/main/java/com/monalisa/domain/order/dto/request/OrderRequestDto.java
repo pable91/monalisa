@@ -5,7 +5,9 @@ import lombok.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
+
 
 public class OrderRequestDto {
 
@@ -25,8 +27,7 @@ public class OrderRequestDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MultiBook {
 
-        @NotBlank
+        @NotNull
         private List<Long> bookIds;
-
     }
 }

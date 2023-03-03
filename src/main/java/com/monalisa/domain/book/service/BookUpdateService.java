@@ -9,9 +9,6 @@ import com.monalisa.domain.book.exception.error.BookErrorCode;
 import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import com.monalisa.domain.book.service.queryService.BookUpdateQueryService;
 import com.monalisa.domain.user.domain.User;
-import com.monalisa.domain.user.exception.UserNotFoundException;
-import com.monalisa.domain.user.exception.error.UserErrorCode;
-import com.monalisa.domain.user.repository.UserRepository;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,18 +23,16 @@ public class BookUpdateService {
     private final BookFindQueryService bookFindQueryService;
     private final BookUpdateQueryService bookUpdateQueryService;
 
-    public BookResponseDto registerBook(final BookRequestDto.Add addBookRequestDto) {
-        final User findUser = validate(addBookRequestDto);
+    public BookResponseDto registerBook(final BookRequestDto.Add addBookRequestDto, final User user) {
+        final User findUser = validate(addBookRequestDto, user);
 
         final Book newBook = Book.registerBook(addBookRequestDto, findUser);
 
         return BookResponseDto.of(bookUpdateQueryService.save(newBook));
     }
 
-    private User validate(final BookRequestDto.Add addBookRequestDto) {
-        // TODO
-        // 나중에 로그인 기능이 있다면 굳이 필요할까?
-        final User findUser = userFindQueryService.findById(addBookRequestDto.getUserId());
+    private User validate(final BookRequestDto.Add addBookRequestDto, final User user) {
+        final User findUser = userFindQueryService.findById(user.getId());
 
         if (bookFindQueryService.isExist(addBookRequestDto, findUser)) {
             throw new BookAlreadyRegisterException(BookErrorCode.BOOK_ALREADY_REGISTER, addBookRequestDto.getName());
@@ -45,9 +40,9 @@ public class BookUpdateService {
         return findUser;
     }
 
-    public BookResponseDto updateBook(final BookRequestDto.Update updateBookRequestDto) {
+    public BookResponseDto updateBook(final BookRequestDto.Update updateBookRequestDto, final User user) {
         final Book findBook = bookFindQueryService.findById(updateBookRequestDto.getBookId());
-        if (!findBook.isMine(updateBookRequestDto.getUserId())) {
+        if (!findBook.isMine(user.getId())) {
             throw new IsNotMyBookException(BookErrorCode.IS_NOT_MY_BOOK, updateBookRequestDto.getBookId());
         }
 

@@ -18,7 +18,6 @@ class BookTest {
                 .desc("desc1")
                 .cost(10000)
                 .author("author1")
-                .userId(1L)
                 .build();
 
         User user = User.createTestUser(1L, "kim", "kim@naver.com");
@@ -55,7 +54,6 @@ class BookTest {
                 .desc("desc2")
                 .cost(500)
                 .author("author2")
-                .userId(1L)
                 .bookId(1L)
                 .build();
 

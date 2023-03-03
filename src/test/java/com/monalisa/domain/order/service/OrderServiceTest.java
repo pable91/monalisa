@@ -59,7 +59,6 @@ class OrderServiceTest {
                 .desc("desc")
                 .cost(1000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         BookRequestDto.Add addBookRequestDto2 = BookRequestDto.Add.builder()
@@ -67,7 +66,6 @@ class OrderServiceTest {
                 .desc("desc")
                 .cost(100000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         BookRequestDto.Add addBookRequestDto3 = BookRequestDto.Add.builder()
@@ -75,7 +73,6 @@ class OrderServiceTest {
                 .desc("desc")
                 .cost(500)
                 .author("author")
-                .userId(1L)
                 .build();
 
         book1 = Book.registerBook(addBookRequestDto1, seller);

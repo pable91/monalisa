@@ -5,7 +5,10 @@ import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.order.service.OrderBuyService;
 import com.monalisa.domain.book.service.BookFindService;
 import com.monalisa.domain.book.service.BookUpdateService;
+import com.monalisa.domain.user.domain.User;
+import com.monalisa.global.LoginUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +24,10 @@ public class BookApi {
     private final BookFindService bookFindService;
 
     @PostMapping("/add")
-    public ResponseEntity<BookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto) {
+    public ResponseEntity<BookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto, @LoginUser final User user) {
         System.out.println(addBookRequestDto.toString());
 
-        final BookResponseDto bookResponseDto = bookUpdateService.registerBook(addBookRequestDto);
+        final BookResponseDto bookResponseDto = bookUpdateService.registerBook(addBookRequestDto, user);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -32,10 +35,10 @@ public class BookApi {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<BookResponseDto> updateBook(@RequestBody @Valid final BookRequestDto.Update updateBookRequestDto) {
+    public ResponseEntity<BookResponseDto> updateBook(@RequestBody @Valid final BookRequestDto.Update updateBookRequestDto, @LoginUser final User user) {
         System.out.println(updateBookRequestDto.toString());
 
-        final BookResponseDto bookResponseDto = bookUpdateService.updateBook(updateBookRequestDto);
+        final BookResponseDto bookResponseDto = bookUpdateService.updateBook(updateBookRequestDto, user);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

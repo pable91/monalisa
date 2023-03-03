@@ -27,11 +27,6 @@ public class BookRequestDto {
 
         @NotBlank
         private String author;
-
-        // TODO
-        // 나중에 로그인 기능이 있다면 굳이 필요할까?
-        @Min(1)
-        private Long userId;
     }
 
     @Getter
@@ -51,9 +46,6 @@ public class BookRequestDto {
 
         @NotBlank
         private String author;
-
-        @Min(1)
-        private Long userId;
 
         @Min(1)
         private Long bookId;

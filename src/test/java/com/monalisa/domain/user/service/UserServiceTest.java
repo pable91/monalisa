@@ -55,7 +55,6 @@ public class UserServiceTest {
                 .desc("desc")
                 .cost(1000)
                 .author("author")
-                .userId(1L)
                 .build();
 
         Book book = Book.registerBook(addBookRequestDto, user);
