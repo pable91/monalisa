@@ -42,6 +42,9 @@ public class Book {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Column(name = "likes")
+    private Integer likes;
+
     private Book(final BookRequestDto.Add addBookRequestDto, final User user) {
         this.name = addBookRequestDto.getName();
         this.desc = addBookRequestDto.getDesc();
@@ -76,5 +79,9 @@ public class Book {
         if(this.order == null) {
             this.order = order;
         }
+    }
+
+    public void addLike() {
+        this.likes += 1;
     }
 }

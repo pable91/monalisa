@@ -59,4 +59,12 @@ public class BookUpdateService {
         return BookResponseDto.of(findBook);
     }
 
+    public BookResponseDto likeBook(final Long bookId) {
+        final Book findBook = bookFindQueryService.findById(bookId);
+
+        findBook.addLike();
+
+        return BookResponseDto.of(findBook);
+    }
+
 }

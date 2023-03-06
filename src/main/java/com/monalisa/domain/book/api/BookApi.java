@@ -2,7 +2,6 @@ package com.monalisa.domain.book.api;
 
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
-import com.monalisa.domain.order.service.OrderBuyService;
 import com.monalisa.domain.book.service.BookFindService;
 import com.monalisa.domain.book.service.BookUpdateService;
 import com.monalisa.domain.user.domain.User;
@@ -59,5 +58,13 @@ public class BookApi {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(bookFindService.findById(bookId));
+    }
+
+    @PostMapping("/like/{bookId}")
+    public ResponseEntity<BookResponseDto> likeBook(@PathVariable final Long bookId) {
+        System.out.println("bookId => " + bookId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookUpdateService.likeBook(bookId));
     }
 }

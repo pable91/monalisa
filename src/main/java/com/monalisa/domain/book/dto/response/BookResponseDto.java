@@ -19,16 +19,19 @@ public class BookResponseDto {
 
     private Boolean isSold;
 
-    private BookResponseDto(Book book) {
+    private Integer like;
+
+    private BookResponseDto(final Book book) {
         this.userName = book.getUser().getName();
         this.name = book.getName();
         this.desc = book.getDesc();
         this.cost = book.getCost();
         this.author = book.getAuthor();
         this.isSold = book.isSold();
+        this.like = book.getLikes();
     }
 
-    public static BookResponseDto of(Book book) {
+    public static BookResponseDto of(final Book book) {
         return new BookResponseDto(book);
     }
 }
