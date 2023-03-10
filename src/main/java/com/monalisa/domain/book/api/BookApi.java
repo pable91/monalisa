@@ -7,7 +7,6 @@ import com.monalisa.domain.book.service.BookUpdateService;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.global.LoginUser;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +60,7 @@ public class BookApi {
     }
 
     @PostMapping("/like/{bookId}")
-    public ResponseEntity<BookResponseDto> likeBook(@PathVariable final Long bookId) {
+    public ResponseEntity<BookResponseDto> likeBook(@PathVariable final Long bookId) throws InterruptedException {
         System.out.println("bookId => " + bookId);
         return ResponseEntity
                 .status(HttpStatus.OK)

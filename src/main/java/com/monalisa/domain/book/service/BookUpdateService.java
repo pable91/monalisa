@@ -6,6 +6,8 @@ import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.book.exception.BookAlreadyRegisterException;
 import com.monalisa.domain.book.exception.IsNotMyBookException;
 import com.monalisa.domain.book.exception.error.BookErrorCode;
+import com.monalisa.domain.book.repository.BookRepository;
+import com.monalisa.domain.book.repository.RedisLockBookRepository;
 import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import com.monalisa.domain.book.service.queryService.BookUpdateQueryService;
 import com.monalisa.domain.user.domain.User;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+
 @RequiredArgsConstructor
 public class BookUpdateService {
 
@@ -23,6 +25,10 @@ public class BookUpdateService {
     private final BookFindQueryService bookFindQueryService;
     private final BookUpdateQueryService bookUpdateQueryService;
 
+
+    private final BookRepository bookRepository;
+
+    @Transactional
     public BookResponseDto registerBook(final BookRequestDto.Add addBookRequestDto, final User user) {
         final User findUser = validate(addBookRequestDto, user);
 
@@ -40,6 +46,7 @@ public class BookUpdateService {
         return findUser;
     }
 
+    @Transactional
     public BookResponseDto updateBook(final BookRequestDto.Update updateBookRequestDto, final User user) {
         final Book findBook = bookFindQueryService.findById(updateBookRequestDto.getBookId());
         if (!findBook.isMine(user.getId())) {
@@ -51,6 +58,7 @@ public class BookUpdateService {
         return BookResponseDto.of(findBook);
     }
 
+    @Transactional
     public BookResponseDto deleteBook(final Long bookId) {
         final Book findBook = bookFindQueryService.findById(bookId);
 
@@ -59,12 +67,11 @@ public class BookUpdateService {
         return BookResponseDto.of(findBook);
     }
 
-    public BookResponseDto likeBook(final Long bookId) {
+    public BookResponseDto likeBook(final Long bookId) throws InterruptedException {
         final Book findBook = bookFindQueryService.findById(bookId);
-
         findBook.addLike();
 
+        bookRepository.saveAndFlush(findBook);
         return BookResponseDto.of(findBook);
     }
-
 }

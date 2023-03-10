@@ -8,6 +8,7 @@ import com.monalisa.domain.book.repository.BookRepository;
 import com.monalisa.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,4 +31,16 @@ public class BookFindQueryService {
     public List<Book> findAllByIds(final List<Long> bookIds) {
         return bookRepository.findAllByIds(bookIds);
     }
+
+//    public Book findByIdWithPessimisticLock(final Long bookId) {
+//        return bookRepository.findByIdWithPessimisticLock(bookId).orElseThrow(() -> {
+//            throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
+//        });
+//    }
+
+//    public Book findByIdWithOptimisticLock(final Long bookId) {
+//        return bookRepository.findByIdWithOptimisticLock(bookId).orElseThrow(() -> {
+//            throw new NotFoundBookException(BookErrorCode.BOOK_NOT_FOUND, bookId);
+//        });
+//    }
 }
