@@ -4,6 +4,7 @@ import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.book.service.BookFindService;
 import com.monalisa.domain.book.service.BookUpdateService;
+import com.monalisa.domain.book.service.facade.LettuceLockBookFacade;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.global.LoginUser;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ public class BookApi {
 
     private final BookUpdateService bookUpdateService;
     private final BookFindService bookFindService;
+
+    private final LettuceLockBookFacade lettuceLockBookFacade;
 
     @PostMapping("/add")
     public ResponseEntity<BookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto, @LoginUser final User user) {
@@ -64,6 +67,6 @@ public class BookApi {
         System.out.println("bookId => " + bookId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(bookUpdateService.likeBook(bookId));
+                .body(lettuceLockBookFacade.likeBook(bookId));
     }
 }
