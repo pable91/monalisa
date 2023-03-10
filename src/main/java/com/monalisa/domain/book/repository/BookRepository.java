@@ -16,4 +16,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value = "select b from Book b where b.id in :bookIds")
     List<Book> findAllByIds(List<Long> bookIds);
+
+//    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+//    @Query(value = "select b from Book b where b.id = :id")
+//    Optional<Book> findByIdWithPessimisticLock(Long id);
+//
+//    @Lock(value = LockModeType.OPTIMISTIC)
+//    @Query(value = "select b from Book b where b.id = :id")
+//    Optional<Book> findByIdWithOptimisticLock(Long id);
 }

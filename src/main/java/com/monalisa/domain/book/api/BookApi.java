@@ -4,10 +4,10 @@ import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.dto.response.BookResponseDto;
 import com.monalisa.domain.book.service.BookFindService;
 import com.monalisa.domain.book.service.BookUpdateService;
+import com.monalisa.domain.book.service.facade.LettuceLockBookFacade;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.global.LoginUser;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +21,8 @@ public class BookApi {
 
     private final BookUpdateService bookUpdateService;
     private final BookFindService bookFindService;
+
+    private final LettuceLockBookFacade lettuceLockBookFacade;
 
     @PostMapping("/add")
     public ResponseEntity<BookResponseDto> addBook(@RequestBody @Valid final BookRequestDto.Add addBookRequestDto, @LoginUser final User user) {
@@ -61,10 +63,10 @@ public class BookApi {
     }
 
     @PostMapping("/like/{bookId}")
-    public ResponseEntity<BookResponseDto> likeBook(@PathVariable final Long bookId) {
+    public ResponseEntity<BookResponseDto> likeBook(@PathVariable final Long bookId) throws InterruptedException {
         System.out.println("bookId => " + bookId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(bookUpdateService.likeBook(bookId));
+                .body(lettuceLockBookFacade.likeBook(bookId));
     }
 }
