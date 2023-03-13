@@ -3,6 +3,7 @@ package com.monalisa.global.error;
 import com.monalisa.global.error.errorcode.CommonErrorCode;
 import com.monalisa.global.error.errorcode.ErrorCode;
 import com.monalisa.global.error.exception.BusinessException;
+import com.monalisa.global.error.exception.TooManyExcessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
         log.error("handleEntityNotFoundException", e);
+        final ErrorCode errorCode = e.getErrorCode();
+        final ErrorResponse response = ErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+    }
+
+    @ExceptionHandler(TooManyExcessException.class)
+    protected ResponseEntity<ErrorResponse> handleTooManyExcessException(final TooManyExcessException e) {
+        log.error("TooManyExcessException", e);
         final ErrorCode errorCode = e.getErrorCode();
         final ErrorResponse response = ErrorResponse.of(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
