@@ -29,7 +29,7 @@
 - [x] 주문 CRUD 구현
 - [x] 유저 회원가입, 로그인 구현(jwt + Refresh + Redis)
 - [ ] Admin 기능
-- [ ] 좋아요 기능
+- [x] 좋아요 기능(동시성 ok)
 - [x] AWS ec2 코드 배포
 - [x] Github Action을 이용한 CI / CD 구현
 - 프로젝트 이슈 목록 => https://github.com/users/pable91/projects/1/views/1
