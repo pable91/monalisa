@@ -25,10 +25,6 @@ public class BookUpdateService {
     private final BookFindQueryService bookFindQueryService;
     private final BookUpdateQueryService bookUpdateQueryService;
 
-
-    private final BookRepository bookRepository;
-
-    @Transactional
     public BookResponseDto registerBook(final BookRequestDto.Add addBookRequestDto, final User user) {
         final User findUser = validate(addBookRequestDto, user);
 

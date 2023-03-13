@@ -3,7 +3,7 @@ package com.monalisa.concurrency;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.book.dto.request.BookRequestDto;
 import com.monalisa.domain.book.repository.BookRepository;
-import com.monalisa.domain.book.service.facade.LettuceLockBookFacade;
+import com.monalisa.domain.book.service.facade.RedissonLockBookFacadeFacade;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +15,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @SpringBootTest
-public class ConcurrencyTest {
+public class LikeConcurrencyTest {
 
     @Autowired
-    private LettuceLockBookFacade lettuceLockBookFacade;
+    private RedissonLockBookFacadeFacade redissonLockBookFacade;
+//    private LettuceLockBookFacade lettuceLockBookFacade;
 
     @Autowired
     private BookRepository bookRepository;
@@ -49,7 +50,7 @@ public class ConcurrencyTest {
         for (int i = 0; i < threadCount; ++i) {
             executorService.submit(() -> {
                 try {
-                    lettuceLockBookFacade.likeBook(1L);
+                    redissonLockBookFacade.likeBook(1L);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {

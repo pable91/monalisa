@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LettuceLockBookFacade {
+public class LettuceLockBookFacadeFacade implements LikeBookFacade {
 
     private final BookUpdateService bookUpdateService;
 
