@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Primary
 @Component
 @RequiredArgsConstructor
-public class RedissonLockBookFacadeFacade implements LikeBookFacade {
+public class RedissonLockBookFacade implements LikeBookFacade {
 
     private final RedissonClient redissonClient;
     private final BookUpdateService bookUpdateService;
