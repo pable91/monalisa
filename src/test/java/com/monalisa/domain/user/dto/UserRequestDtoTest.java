@@ -1,6 +1,7 @@
 package com.monalisa.domain.user.dto;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,7 +16,15 @@ import java.util.stream.Stream;
 
 class UserRequestDtoTest {
 
-    static Stream<Arguments> arguments1() {
+    private Validator validator;
+
+    @BeforeEach
+    public void before() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
+    static Stream<Arguments> signUpDtoArguments1() {
         return Stream.of(
                 Arguments.arguments("id1", "12345", "kim", "kim@naver.com", 0),
                 Arguments.arguments("", "12345", "", "kim@naver.com", 2),
@@ -25,12 +34,9 @@ class UserRequestDtoTest {
     }
 
     @ParameterizedTest
-    @MethodSource("arguments1")
-    @DisplayName("signup 필드 검증 테스트")
-    public void signUpFieldValidationTest(String accountId, String pw, String name, String email, int invalidCnt) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
+    @MethodSource("signUpDtoArguments1")
+    @DisplayName("signup 필드 검증 테스트(존재 유무)")
+    public void signUpFieldValidationTest1(String accountId, String pw, String name, String email, int invalidCnt) {
         UserRequestDto.SignUp signUpRequestDto =  UserRequestDto.SignUp.builder()
                 .accountId(accountId)
                 .pw(pw)
@@ -42,7 +48,31 @@ class UserRequestDtoTest {
         Assertions.assertThat(violations.size()).isEqualTo(invalidCnt);
     }
 
-    static Stream<Arguments> arguments2() {
+    static Stream<Arguments> signUpDtoArguments2() {
+        return Stream.of(
+                Arguments.arguments("id1sssssssssssssssssssssssssss", "12345", "kim", "kim@naver.com", 1),
+                Arguments.arguments("id1sssssssssssssssssssssssssss", "1234525234234232", "kim", "kim@naver.com", 2),
+                Arguments.arguments("id1sssssssssssssssssssssssssss", "1234525234234232", "kimkimkimkimkimkimkim", "kim@naver.com", 3),
+                Arguments.arguments("id1sssssssssssssssssssssssssss", "1234525234234232", "kimkimkimkimkimkimkim", "kim@naver.comkim@naver.comkim@naver.comkim@naver.comkim@naver.comkim@naver.com", 4)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("signUpDtoArguments2")
+    @DisplayName("signup 필드 검증 테스트(길이제한 테스트)")
+    public void signUpFieldValidationTest2(String accountId, String pw, String name, String email, int invalidCnt) {
+        UserRequestDto.SignUp signUpRequestDto =  UserRequestDto.SignUp.builder()
+                .accountId(accountId)
+                .pw(pw)
+                .name(name)
+                .email(email)
+                .build();
+
+        Set<ConstraintViolation<UserRequestDto.SignUp>> violations = validator.validate(signUpRequestDto);
+        Assertions.assertThat(violations.size()).isEqualTo(invalidCnt);
+    }
+
+    static Stream<Arguments> loginDtoArguments1() {
         return Stream.of(
                 Arguments.arguments("id1", "", 1),
                 Arguments.arguments("", "12345", 1),
@@ -51,12 +81,9 @@ class UserRequestDtoTest {
     }
 
     @ParameterizedTest
-    @MethodSource("arguments2")
+    @MethodSource("loginDtoArguments1")
     @DisplayName("login 필드 검증 테스트")
     public void loginFieldValidationTest(String accountId, String pw, int invalidCnt) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
         UserRequestDto.Login loginRequestDto =  UserRequestDto.Login.builder()
                 .accountId(accountId)
                 .pw(pw)

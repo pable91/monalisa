@@ -19,7 +19,7 @@ public class Book {
     @Column(name = "book_id", updatable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 30)
     private String name;
 
     @Column(name = "description", nullable = false)
@@ -28,7 +28,7 @@ public class Book {
     @Column(name = "cost", nullable = false)
     private Integer cost;
 
-    @Column(name = "author", nullable = false)
+    @Column(name = "author", nullable = false, length = 20)
     private String author;
 
     @Column(name = "is_sold")
