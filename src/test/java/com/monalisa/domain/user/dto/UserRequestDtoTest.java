@@ -1,11 +1,11 @@
 package com.monalisa.domain.user.dto;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -15,6 +15,14 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 class UserRequestDtoTest {
+
+    private Validator validator;
+
+    @BeforeEach
+    public void before() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
     static Stream<Arguments> signUpDtoArguments1() {
         return Stream.of(
@@ -29,9 +37,6 @@ class UserRequestDtoTest {
     @MethodSource("signUpDtoArguments1")
     @DisplayName("signup 필드 검증 테스트(존재 유무)")
     public void signUpFieldValidationTest1(String accountId, String pw, String name, String email, int invalidCnt) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
         UserRequestDto.SignUp signUpRequestDto =  UserRequestDto.SignUp.builder()
                 .accountId(accountId)
                 .pw(pw)
@@ -56,9 +61,6 @@ class UserRequestDtoTest {
     @MethodSource("signUpDtoArguments2")
     @DisplayName("signup 필드 검증 테스트(길이제한 테스트)")
     public void signUpFieldValidationTest2(String accountId, String pw, String name, String email, int invalidCnt) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
         UserRequestDto.SignUp signUpRequestDto =  UserRequestDto.SignUp.builder()
                 .accountId(accountId)
                 .pw(pw)
@@ -82,9 +84,6 @@ class UserRequestDtoTest {
     @MethodSource("loginDtoArguments1")
     @DisplayName("login 필드 검증 테스트")
     public void loginFieldValidationTest(String accountId, String pw, int invalidCnt) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
         UserRequestDto.Login loginRequestDto =  UserRequestDto.Login.builder()
                 .accountId(accountId)
                 .pw(pw)

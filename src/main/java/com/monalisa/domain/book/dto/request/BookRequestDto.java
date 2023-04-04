@@ -16,16 +16,17 @@ public class BookRequestDto {
     public static class Add {
 
         @NotBlank
+        @Length(max = 30, message = "책 이름의 길이는 30이하 입니다")
         private String name;
 
         @Lob
-        @Length(max = 100, message = "등록된 설명이 없습니다")
         private String desc;
 
         @Min(500)
         private Integer cost;
 
         @NotBlank
+        @Length(max = 20, message = "저자의 이름의 길이는 20이하입니다")
         private String author;
     }
 
@@ -35,16 +36,17 @@ public class BookRequestDto {
     public static class Update {
 
         @NotBlank
+        @Length(max = 30, message = "책 이름의 길이는 30이하 입니다")
         private String name;
 
         @Lob
-        @Length(max = 100, message = "등록된 설명이 없습니다")
         private String desc;
 
         @Min(500)
         private Integer cost;
 
         @NotBlank
+        @Length(max = 20, message = "저자의 이름의 길이는 20이하입니다")
         private String author;
 
         @Min(1)
