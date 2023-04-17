@@ -1,8 +1,0 @@
-spring:
-  profiles:
-    include: real-db # ec2에 존재함
-
-  jpa:
-    properties:
-      hibernate:
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
