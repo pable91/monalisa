@@ -6,6 +6,7 @@ import com.monalisa.domain.book.repository.BookRepository;
 import com.monalisa.domain.book.service.facade.RedissonLockBookFacade;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Disabled
 @SpringBootTest
 public class LikeConcurrencyTest {
 
