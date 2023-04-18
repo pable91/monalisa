@@ -12,14 +12,16 @@
     - 내손으로 직접 타이핑해서 글로 남기면 훨씬 머리에 오래남고 미래에 다시 돌아볼 수 있다. 
 
 # 사용기술
-- java11
+- java17
 - Springboot 2.7
 - Spring-Data-JPA
 - Redis
 - QueryDSL
+- jwt
 - H2(AWS에서는 MariaDB)
 - Junit5
-- AWS ec2
+- AWS ec2, codeDeploy, s3, Github Action 
+- Spring-Rest-Docs
 
 # 구조
 ![architecture](https://user-images.githubusercontent.com/22884224/220965624-b52c7655-febb-42ab-b8cd-c38567eb726f.png)
