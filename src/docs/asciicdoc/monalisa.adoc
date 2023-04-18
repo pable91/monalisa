@@ -1,0 +1,15 @@
+= Monalisa API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+= User
+=== signup(회원가입)
+====== request
+include::{snippets}/user/signup/http-request.adoc[]
+include::{snippets}/user/signup/request-fields.adoc[]
+======  response
+include::{snippets}/user/signup/http-response.adoc[]
+include::{snippets}/user/signup/response-fields.adoc[]
