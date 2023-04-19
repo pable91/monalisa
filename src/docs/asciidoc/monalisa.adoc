@@ -10,6 +10,14 @@
 ====== request
 include::{snippets}/user/signup/http-request.adoc[]
 include::{snippets}/user/signup/request-fields.adoc[]
-======  response
+====== response
 include::{snippets}/user/signup/http-response.adoc[]
 include::{snippets}/user/signup/response-fields.adoc[]
+
+=== login(로그인)
+====== request
+include::{snippets}/user/login/http-request.adoc[]
+include::{snippets}/user/login/request-fields.adoc[]
+====== response
+include::{snippets}/user/login/http-response.adoc[]
+include::{snippets}/user/login/response-fields.adoc[]
