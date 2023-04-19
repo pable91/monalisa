@@ -23,6 +23,10 @@
 - AWS ec2, codeDeploy, s3, Github Action 
 - Spring-Rest-Docs
 
+# API
+- local : http://localhost:8080/docs/monalisa.html
+- live : 
+
 # 구조
 ![architecture](https://user-images.githubusercontent.com/22884224/220965624-b52c7655-febb-42ab-b8cd-c38567eb726f.png)
 
