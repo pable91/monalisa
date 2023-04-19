@@ -150,7 +150,7 @@ class UserApiTest {
     @DisplayName("AccessToken 갱신 테스트")
     @Test
     @WithMockUser
-    void RefreshAccessToken() throws Exception {
+    void refreshAccessTokenTest() throws Exception {
         User user = User.createUser("kim", "1234", "kim", "kim@naver.com");
 
         given(userService.findByAccountId(any()))
@@ -179,4 +179,31 @@ class UserApiTest {
                         responseBody()
                 ));
     }
+
+    @DisplayName("Profile 테스트")
+    @Test
+    @WithMockUser
+    void profileTest() throws Exception {
+        UserResponseDto.Profile responseDto = UserResponseDto.Profile.of(User.createUser("kim", "1234", "kim", "kim@naver.com"));
+
+        given(userService.profile(any()))
+                .willReturn(responseDto);
+
+        mockMvc.perform(get("/user/profile")
+        )
+                .andExpect(status().isOk())
+                .andDo(document("/user/profile",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("userName").type(JsonFieldType.STRING).description("아이디"),
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
+                                fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
+                                fieldWithPath("role").type(JsonFieldType.STRING).description("역할"),
+                                fieldWithPath("registerBookList").type(JsonFieldType.ARRAY).description("판매 등록한 책 리스트")
+                        )
+                ));
+    }
+
+
 }
