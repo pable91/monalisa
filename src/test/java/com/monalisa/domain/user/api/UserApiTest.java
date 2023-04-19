@@ -36,6 +36,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureRestDocs
@@ -117,12 +118,15 @@ class UserApiTest {
         given(jwtTokenProvider.createRefreshToken(any(User.class)))
                 .willReturn(new RefreshToken(UUID.randomUUID().toString(), "kim"));
 
+        // when, then
         mockMvc.perform(post("/user/login").with(csrf())
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(MediaType.APPLICATION_JSON)
             )
             .andExpect(status().isOk())
+            .andExpect(header().stringValues("ACCESS_TOKEN", "Test AccessToken"))
+            .andExpect(header().exists("REFRESH_TOKEN"))
             .andDo(document("/user/login",
                     Preprocessors.preprocessRequest(prettyPrint()),
                     Preprocessors.preprocessResponse(prettyPrint()),
