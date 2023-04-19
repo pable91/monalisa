@@ -1,6 +1,9 @@
 package com.monalisa.domain.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monalisa.domain.book.domain.Book;
+import com.monalisa.domain.book.dto.request.BookRequestDto;
+import com.monalisa.domain.order.domain.Order;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.dto.UserRequestDto;
 import com.monalisa.domain.user.dto.response.UserResponseDto;
@@ -15,14 +18,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -52,7 +56,7 @@ class UserApiTest {
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @DisplayName("회원가입 테스트")
     @Test
@@ -205,5 +209,48 @@ class UserApiTest {
                 ));
     }
 
+    @DisplayName("내 주문 목록 조회 테스트")
+    @Test
+    @WithMockUser
+    void findMyOrderListTest() throws Exception {
+        UserResponseDto.OrderList responseDto = UserResponseDto.OrderList.of(
+                List.of(
+                        Order.createOrderBySingleBook(
+                                Book.registerBook(BookRequestDto.Add.builder()
+                                                .name("book1")
+                                                .desc("desc1")
+                                                .cost(10000)
+                                                .author("author1")
+                                                .build()
+                                        , User.createUser("seller1", "1234", "kim", "kim@naver.com")
+                                )
+                                , User.createUser("buyer1", "1234", "kim", "kim@naver.com")
+                        )
+                )
+        );
 
+        given(userService.findOrderList(any()))
+                .willReturn(responseDto);
+
+
+        mockMvc.perform(get("/user/orderList")
+        )
+                .andExpect(status().isOk())
+                .andDo(document("/user/orderList",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("orderList").type(JsonFieldType.ARRAY).description("주문 리스트"),
+                                fieldWithPath("orderList[].totalPrice").type(JsonFieldType.NUMBER).description("아이디"),
+                                fieldWithPath("orderList[].orderDate").type(JsonFieldType.STRING).description("날짜"),
+                                fieldWithPath("orderList[].bookList[].userName").type(JsonFieldType.STRING).description("아이디"),
+                                fieldWithPath("orderList[].bookList[].name").type(JsonFieldType.STRING).description("책 이름"),
+                                fieldWithPath("orderList[].bookList[].desc").type(JsonFieldType.STRING).description("책 설명"),
+                                fieldWithPath("orderList[].bookList[].cost").type(JsonFieldType.NUMBER).description("책 가격"),
+                                fieldWithPath("orderList[].bookList[].author").type(JsonFieldType.STRING).description("저자"),
+                                fieldWithPath("orderList[].bookList[].isSold").type(JsonFieldType.BOOLEAN).description("판매여부"),
+                                fieldWithPath("orderList[].bookList[].like").type(JsonFieldType.NUMBER).description("좋아요 개수")
+                        )
+                ));
+    }
 }

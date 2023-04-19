@@ -36,5 +36,10 @@ include::{snippets}/user/refresh/http-response.adoc[]
 include::{snippets}/user/profile/http-response.adoc[]
 include::{snippets}/user/profile/response-fields.adoc[]
 
+=== MyOrderList(내 주문 조회리스트)
+====== response
+include::{snippets}/user/orderList/http-response.adoc[]
+include::{snippets}/user/orderList/response-fields.adoc[]
+
 
 

@@ -17,7 +17,7 @@ public abstract class BaseTimeEntity {
 
     @CreatedDate
     @Column(name = "create_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
 //    @LastModifiedDate
 //    private LocalDateTime modifiedDate;

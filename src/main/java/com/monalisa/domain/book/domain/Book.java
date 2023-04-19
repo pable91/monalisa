@@ -52,6 +52,7 @@ public class Book {
         this.cost = addBookRequestDto.getCost();
         this.user = user;
         this.isSold = false;
+        this.likes = 0;
 
         if (user != null) {
             user.getRegisterBooks().add(this);

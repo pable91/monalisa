@@ -71,8 +71,9 @@ public class UserApi {
 
     @GetMapping("/orderList")
     public ResponseEntity<UserResponseDto.OrderList> findMyOrderList(@LoginUser final User user) {
+        Long userId = (user == null) ? null : user.getId();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.findOrderList(user.getId()));
+                .body(userService.findOrderList(userId));
     }
 }
