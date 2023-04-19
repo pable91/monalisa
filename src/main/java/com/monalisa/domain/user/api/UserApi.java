@@ -48,7 +48,7 @@ public class UserApi {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<String> refresh(@RequestHeader("REFRESH_TOKEN") final String refreshToken, @RequestParam("accountId") final String accountId) {
+    public ResponseEntity<String> refreshAccessToken(@RequestHeader("REFRESH_TOKEN") final String refreshToken, @RequestParam("accountId") final String accountId) {
         User user = userService.findByAccountId(accountId);
 
         String newAccessToken = jwtTokenProvider.recreateAccessToken(refreshToken, user);

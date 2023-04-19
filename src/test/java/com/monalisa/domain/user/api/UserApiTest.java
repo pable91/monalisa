@@ -9,33 +9,33 @@ import com.monalisa.global.config.security.jwt.JwtTokenProvider;
 import com.monalisa.global.config.security.jwt.RefreshToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
-import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,10 +73,10 @@ class UserApiTest {
 
         // when, then
         mockMvc.perform(post("/user/signup").with(csrf())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto))
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
                 .andExpect(status().isOk())
                 .andDo(document("/user/signup",
                         Preprocessors.preprocessRequest(prettyPrint()),
@@ -123,23 +123,60 @@ class UserApiTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(MediaType.APPLICATION_JSON)
-            )
-            .andExpect(status().isOk())
-            .andExpect(header().stringValues("ACCESS_TOKEN", "Test AccessToken"))
-            .andExpect(header().exists("REFRESH_TOKEN"))
-            .andDo(document("/user/login",
-                    Preprocessors.preprocessRequest(prettyPrint()),
-                    Preprocessors.preprocessResponse(prettyPrint()),
-                    requestFields(
-                            fieldWithPath("accountId").description("사용자 아이디").type(JsonFieldType.STRING),
-                            fieldWithPath("pw").description("비밀번호").type(JsonFieldType.STRING)
-                    ),
-                    responseFields(
-                            fieldWithPath("userName").description("사용자 이름").type(JsonFieldType.STRING),
-                            fieldWithPath("registerBookList").description("등록한 책 리스트").type(JsonFieldType.ARRAY),
-                            fieldWithPath("accessToken").description("엑세스 토큰").type(JsonFieldType.STRING),
-                            fieldWithPath("refreshToken").description("리프레시 토큰").type(JsonFieldType.STRING)
-                    )
-        ));
+        )
+                .andExpect(status().isOk())
+                .andExpect(header().stringValues("ACCESS_TOKEN", "Test AccessToken"))
+                .andExpect(header().exists("REFRESH_TOKEN"))
+                .andDo(document("/user/login",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("accountId").description("사용자 아이디").type(JsonFieldType.STRING),
+                                fieldWithPath("pw").description("비밀번호").type(JsonFieldType.STRING)
+                        ),
+                        responseFields(
+                                fieldWithPath("userName").description("사용자 이름").type(JsonFieldType.STRING),
+                                fieldWithPath("registerBookList").description("등록한 책 리스트").type(JsonFieldType.ARRAY),
+                                fieldWithPath("accessToken").description("엑세스 토큰").type(JsonFieldType.STRING),
+                                fieldWithPath("refreshToken").description("리프레시 토큰").type(JsonFieldType.STRING)
+                        ),
+                        responseHeaders(
+                                headerWithName("ACCESS_TOKEN").description("응답 헤더의 Access Token"),
+                                headerWithName("REFRESH_TOKEN").description("응답 헤더의 Access Token")
+                        )
+                ));
+    }
+
+    @DisplayName("AccessToken 갱신 테스트")
+    @Test
+    @WithMockUser
+    void RefreshAccessToken() throws Exception {
+        User user = User.createUser("kim", "1234", "kim", "kim@naver.com");
+
+        given(userService.findByAccountId(any()))
+                .willReturn(user);
+        given(jwtTokenProvider.recreateAccessToken(any(), any()))
+                .willReturn("Test NewAccessToken");
+
+        mockMvc.perform(get("/user/refresh")
+                .param("accountId", "kim")
+                .header("REFRESH_TOKEN", "Test refresh Token")
+        )
+                .andExpect(status().isOk())
+                .andExpect(header().stringValues("ACCESS_TOKEN", "Test NewAccessToken"))
+                .andDo(document("/user/refresh",
+                        Preprocessors.preprocessRequest(prettyPrint()),
+                        Preprocessors.preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName("REFRESH_TOKEN").description("요청헤더의 Refresh Token")
+                        ),
+                        requestParameters(
+                                parameterWithName("accountId").description("사용자 아이디")
+                        ),
+                        responseHeaders(
+                                headerWithName("ACCESS_TOKEN").description("응답 헤더의 갱신된 AccessToken")
+                        ),
+                        responseBody()
+                ));
     }
 }

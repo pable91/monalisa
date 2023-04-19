@@ -21,3 +21,14 @@ include::{snippets}/user/login/request-fields.adoc[]
 ====== response
 include::{snippets}/user/login/http-response.adoc[]
 include::{snippets}/user/login/response-fields.adoc[]
+
+=== AccessToken refresh(Access Token 갱신)
+====== request
+include::{snippets}/user/refresh/http-request.adoc[]
+include::{snippets}/user/refresh/request-parameters.adoc[]
+include::{snippets}/user/refresh/request-headers.adoc[]
+====== response
+include::{snippets}/user/refresh/http-response.adoc[]
+//include::{snippets}/user/refresh/response-fields.adoc[]
+
+
