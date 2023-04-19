@@ -1,0 +1,45 @@
+= Monalisa API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+
+= User
+=== signup(회원가입)
+====== request
+include::{snippets}/user/signup/http-request.adoc[]
+include::{snippets}/user/signup/request-fields.adoc[]
+====== response
+include::{snippets}/user/signup/http-response.adoc[]
+include::{snippets}/user/signup/response-fields.adoc[]
+
+=== login(로그인)
+====== request
+include::{snippets}/user/login/http-request.adoc[]
+include::{snippets}/user/login/request-fields.adoc[]
+====== response
+include::{snippets}/user/login/http-response.adoc[]
+include::{snippets}/user/login/response-fields.adoc[]
+
+=== AccessToken refresh(엑세스토큰 갱신)
+====== request
+include::{snippets}/user/refresh/http-request.adoc[]
+include::{snippets}/user/refresh/request-parameters.adoc[]
+include::{snippets}/user/refresh/request-headers.adoc[]
+====== response
+include::{snippets}/user/refresh/http-response.adoc[]
+//include::{snippets}/user/refresh/response-fields.adoc[]
+
+=== Profile(지금 로그인 된 사용자 조회)
+====== response
+include::{snippets}/user/profile/http-response.adoc[]
+include::{snippets}/user/profile/response-fields.adoc[]
+
+=== MyOrderList(내 주문 조회리스트)
+====== response
+include::{snippets}/user/orderList/http-response.adoc[]
+include::{snippets}/user/orderList/response-fields.adoc[]
+
+
+

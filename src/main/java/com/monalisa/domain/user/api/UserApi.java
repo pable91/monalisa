@@ -48,7 +48,7 @@ public class UserApi {
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<String> refresh(@RequestHeader("REFRESH_TOKEN") final String refreshToken, @RequestParam("accountId") final String accountId) {
+    public ResponseEntity<String> refreshAccessToken(@RequestHeader("REFRESH_TOKEN") final String refreshToken, @RequestParam("accountId") final String accountId) {
         User user = userService.findByAccountId(accountId);
 
         String newAccessToken = jwtTokenProvider.recreateAccessToken(refreshToken, user);
@@ -71,8 +71,9 @@ public class UserApi {
 
     @GetMapping("/orderList")
     public ResponseEntity<UserResponseDto.OrderList> findMyOrderList(@LoginUser final User user) {
+        Long userId = (user == null) ? null : user.getId();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.findOrderList(user.getId()));
+                .body(userService.findOrderList(userId));
     }
 }
