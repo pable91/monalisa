@@ -42,7 +42,7 @@ jobs:
       shell: bash
       
     - name: Build with Gradle
-      run: ./gradlew clean -x test build
+      run: ./gradlew clean -x asciidoctor build
       shell: bash
 
     - name: Get current time
