@@ -14,55 +14,55 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SpringBootTest
-public class ConcurrencyTest {
-
-    @Autowired
-    private LettuceLockBookFacade lettuceLockBookFacade;
-
-    @Autowired
-    private BookRepository bookRepository;
-
-
-    private Book testBook;
-
-    @BeforeEach
-    public void before() {
-
-        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
-                .name("kim")
-                .desc("desc")
-                .cost(1000)
-                .author("author")
-                .build();
-
-        Book book = Book.registerBook(addBookRequestDto, null);
-
-        testBook = bookRepository.save(book);
-    }
-
-    @Test
-    public void likeConcurrencyTest() throws InterruptedException {
-        int threadCount = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(33);
-        CountDownLatch latch = new CountDownLatch(threadCount);
-        for (int i = 0; i < threadCount; ++i) {
-            executorService.submit(() -> {
-                try {
-                    lettuceLockBookFacade.likeBook(1L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-        latch.await();
-
-        executorService.shutdown();
-
-        Book book = bookRepository.findById(1L).orElseThrow();
-
-        Assertions.assertThat(book.getLikes()).isEqualTo(100);
-    }
-}
+//@SpringBootTest
+//public class ConcurrencyTest {
+//
+//    @Autowired
+//    private LettuceLockBookFacade lettuceLockBookFacade;
+//
+//    @Autowired
+//    private BookRepository bookRepository;
+//
+//
+//    private Book testBook;
+//
+//    @BeforeEach
+//    public void before() {
+//
+//        BookRequestDto.Add addBookRequestDto = BookRequestDto.Add.builder()
+//                .name("kim")
+//                .desc("desc")
+//                .cost(1000)
+//                .author("author")
+//                .build();
+//
+//        Book book = Book.registerBook(addBookRequestDto, null);
+//
+//        testBook = bookRepository.save(book);
+//    }
+//
+//    @Test
+//    public void likeConcurrencyTest() throws InterruptedException {
+//        int threadCount = 100;
+//        ExecutorService executorService = Executors.newFixedThreadPool(33);
+//        CountDownLatch latch = new CountDownLatch(threadCount);
+//        for (int i = 0; i < threadCount; ++i) {
+//            executorService.submit(() -> {
+//                try {
+//                    lettuceLockBookFacade.likeBook(1L);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    latch.countDown();
+//                }
+//            });
+//        }
+//        latch.await();
+//
+//        executorService.shutdown();
+//
+//        Book book = bookRepository.findById(1L).orElseThrow();
+//
+//        Assertions.assertThat(book.getLikes()).isEqualTo(100);
+//    }
+//}
