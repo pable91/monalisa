@@ -4,6 +4,7 @@ import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     //    Optional<Book> findByNameAndUser(String name, User user);
 
     @Query(value = "select b from Book b where b.id in :bookIds")
-    List<Book> findAllByIds(List<Long> bookIds);
+    List<Book> findAllByIds(@Param("bookIds") List<Long> bookIds);
 
 //    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
 //    @Query(value = "select b from Book b where b.id = :id")
