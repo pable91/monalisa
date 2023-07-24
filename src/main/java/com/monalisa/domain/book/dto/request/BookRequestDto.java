@@ -12,7 +12,8 @@ public class BookRequestDto {
 
     @Getter
     @Builder
-    @ToString
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     public static class Add {
 
         @NotBlank
@@ -32,7 +33,8 @@ public class BookRequestDto {
 
     @Getter
     @Builder
-    @ToString
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     public static class Update {
 
         @NotBlank
