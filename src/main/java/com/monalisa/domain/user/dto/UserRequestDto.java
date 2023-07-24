@@ -1,18 +1,21 @@
 package com.monalisa.domain.user.dto;
 
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserRequestDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     public static class SignUp {
 
         @NotBlank
@@ -34,7 +37,10 @@ public class UserRequestDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     public static class Login {
+
         @NotBlank
         @Size(max = 20, message = "아이디의 길이는 0부터 20자리 까지입니다.")
         private String accountId;
