@@ -1,6 +1,9 @@
 package com.monalisa.domain.order.domain;
 
+import com.monalisa.domain.book.domain.Book;
+import com.monalisa.domain.user.domain.User;
 import com.monalisa.global.domain.BaseTimeEntity;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,13 +33,18 @@ public class OrderDetail extends BaseTimeEntity {
 
     private String buyerName;
 
-    public OrderDetail(String bookName, String buyerName) {
+    private OrderDetail(String bookName, String buyerName) {
         this.bookName = bookName;
         this.buyerName = buyerName;
     }
 
-    public static OrderDetail createOrderDetail(Order order) {
+    public static OrderDetail createOrderDetailBySingleBook(Order order) {
         return new OrderDetail(order.getBookList().get(0).getName(), order.getBuyer().getName());
+    }
+
+
+    public static OrderDetail createOrderDetailBySingleBook(Book book, User buyer) {
+        return new OrderDetail(book.getName(), buyer.getName());
     }
 
     public void setOrder(Order order) {

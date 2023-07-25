@@ -14,6 +14,7 @@ import com.monalisa.domain.order.dto.response.OrderResponseDto;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.domain.user.service.queryService.UserFindQueryService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,15 +35,15 @@ public class OrderBuyService {
 
         validate(buyer, requestDto, targetBook);
 
-        createOrder(buyer, targetBook);
+        createOrderByMultiBook(buyer, targetBook);
 
         return OrderResponseDto.CreateSingle.of(targetBook, buyer.getName());
     }
 
-    private void createOrder(User buyer, Book targetBook) {
-        Order order = Order.createOrderBySingleBook(targetBook, buyer);
-        order.addOrderDetail(OrderDetail.createOrderDetail(order));
-        orderUpdateQueryService.save(order);
+    private void createOrderByMultiBook(User buyer, Book targetBook) {
+        Order newOrder = Order.createOrderBySingleBook(targetBook, buyer);
+        newOrder.addOrderDetail(OrderDetail.createOrderDetailBySingleBook(newOrder));
+        orderUpdateQueryService.save(newOrder);
     }
 
     private void validate(final User buyer, final OrderRequestDto.SingleBook requestDto,
@@ -67,10 +68,23 @@ public class OrderBuyService {
             .filter(b -> !b.isSold())
             .toList();
 
-        Order newOrder = Order.createOrderByMultiBook(bookListByNotSold, buyer);
+        Order newOrder = createOrderByMultiBook(buyer, bookListByNotSold);
 
         return OrderResponseDto.CreateMulti.of(orderUpdateQueryService.save(newOrder).getBookList(),
             buyer);
+    }
+
+    private static Order createOrderByMultiBook(User buyer, List<Book> bookListByNotSold) {
+        Order newOrder = Order.createOrderByMultiBook(bookListByNotSold, buyer);
+
+        List<OrderDetail> detailList = newOrder.getBookList()
+            .stream()
+            .map(book -> OrderDetail.createOrderDetailBySingleBook(book, newOrder.getBuyer()))
+            .collect(Collectors.toList());
+
+        newOrder.setOrderDetailList(detailList);
+
+        return newOrder;
     }
 
     private void validate(MultiBook requestDto, List<Book> bookList) {
