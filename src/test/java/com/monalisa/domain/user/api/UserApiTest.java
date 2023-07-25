@@ -209,7 +209,7 @@ class UserApiTest {
                     fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
                     fieldWithPath("email").type(JsonFieldType.STRING).description("사용자 이메일"),
                     fieldWithPath("role").type(JsonFieldType.STRING).description("역할"),
-                    fieldWithPath("registerBookList").type(JsonFieldType.ARRAY)
+                    fieldWithPath("myRegisterBooks").type(JsonFieldType.ARRAY)
                         .description("판매 등록한 책 리스트")
                 )
             ));
