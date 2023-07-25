@@ -7,6 +7,7 @@ import com.monalisa.domain.book.exception.NotFoundBookException;
 import com.monalisa.domain.book.exception.error.BookErrorCode;
 import com.monalisa.domain.book.service.queryService.BookFindQueryService;
 import com.monalisa.domain.order.domain.Order;
+import com.monalisa.domain.order.domain.OrderDetail;
 import com.monalisa.domain.order.dto.request.OrderRequestDto;
 import com.monalisa.domain.order.dto.request.OrderRequestDto.MultiBook;
 import com.monalisa.domain.order.dto.response.OrderResponseDto;
@@ -33,10 +34,15 @@ public class OrderBuyService {
 
         validate(buyer, requestDto, targetBook);
 
-        Order order = Order.createOrderBySingleBook(targetBook, buyer);
-        orderUpdateQueryService.save(order);
+        createOrder(buyer, targetBook);
 
         return OrderResponseDto.CreateSingle.of(targetBook, buyer.getName());
+    }
+
+    private void createOrder(User buyer, Book targetBook) {
+        Order order = Order.createOrderBySingleBook(targetBook, buyer);
+        order.addOrderDetail(OrderDetail.createOrderDetail(order));
+        orderUpdateQueryService.save(order);
     }
 
     private void validate(final User buyer, final OrderRequestDto.SingleBook requestDto,

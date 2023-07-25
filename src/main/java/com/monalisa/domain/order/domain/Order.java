@@ -32,6 +32,9 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "buyer_id")
     private User buyer;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDetail> orderDetail = new ArrayList<>();
+
     private Order(final Book book, final User buyer) {
         this.totalPrice = book.getCost();
         this.buyer = buyer;
@@ -56,5 +59,10 @@ public class Order extends BaseTimeEntity {
     public static Order createOrderByMultiBook(final List<Book> bookList, final User buyer) {
         bookList.stream().forEach(b -> b.setBuyState());
         return new Order(bookList, buyer);
+    }
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        this.orderDetail.add(orderDetail);
+        orderDetail.setOrder(this);
     }
 }
