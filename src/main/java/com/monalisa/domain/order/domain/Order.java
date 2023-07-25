@@ -3,13 +3,22 @@ package com.monalisa.domain.order.domain;
 import com.monalisa.domain.book.domain.Book;
 import com.monalisa.domain.user.domain.User;
 import com.monalisa.global.domain.BaseTimeEntity;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
@@ -22,15 +31,18 @@ public class Order extends BaseTimeEntity {
     @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "order_total_price")
-    private Integer totalPrice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id")
+    private User buyer;
 
     @OneToMany(mappedBy = "order")
     private List<Book> bookList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id")
-    private User buyer;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDetail> orderDetail = new ArrayList<>();
+
+    @Column(name = "order_total_price")
+    private Integer totalPrice;
 
     private Order(final Book book, final User buyer) {
         this.totalPrice = book.getCost();
@@ -56,5 +68,16 @@ public class Order extends BaseTimeEntity {
     public static Order createOrderByMultiBook(final List<Book> bookList, final User buyer) {
         bookList.stream().forEach(b -> b.setBuyState());
         return new Order(bookList, buyer);
+    }
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        this.orderDetail.add(orderDetail);
+        orderDetail.setOrder(this);
+    }
+
+    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
+        this.orderDetail = orderDetailList;
+        orderDetailList.stream()
+            .forEach(orderDetail -> orderDetail.setOrder(this));
     }
 }

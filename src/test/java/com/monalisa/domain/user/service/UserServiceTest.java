@@ -20,9 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -75,8 +72,8 @@ public class UserServiceTest {
         Assertions.assertThat(responseDto.getUserName()).isEqualTo("kim");
         Assertions.assertThat(responseDto.getEmail()).isEqualTo("kim@naver.com");
         Assertions.assertThat(responseDto.getRole()).isEqualTo(Role.NORMAL);
-        Assertions.assertThat(responseDto.getRegisterBookList().size()).isEqualTo(1);
-        Assertions.assertThat(responseDto.getRegisterBookList().get(0).getName()).isEqualTo("book1");
+        Assertions.assertThat(responseDto.getMyRegisterBooks().size()).isEqualTo(1);
+        Assertions.assertThat(responseDto.getMyRegisterBooks().get(0).getName()).isEqualTo("book1");
     }
 
     @Test

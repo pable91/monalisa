@@ -38,7 +38,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Book> registerBooks = new ArrayList<>();
+    private List<Book> myRegisterBooks = new ArrayList<>();
 
     private User(final String name) {
         this.name = name;
