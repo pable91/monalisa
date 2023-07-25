@@ -29,8 +29,10 @@ public class OrderDetail extends BaseTimeEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Column(name = "book_name", nullable = false)
     private String bookName;
 
+    @Column(name = "buyer_name", nullable = false)
     private String buyerName;
 
     private OrderDetail(String bookName, String buyerName) {

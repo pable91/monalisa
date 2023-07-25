@@ -31,18 +31,18 @@ public class Order extends BaseTimeEntity {
     @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "order_total_price")
-    private Integer totalPrice;
-
-    @OneToMany(mappedBy = "order")
-    private List<Book> bookList = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     private User buyer;
 
+    @OneToMany(mappedBy = "order")
+    private List<Book> bookList = new ArrayList<>();
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetail = new ArrayList<>();
+
+    @Column(name = "order_total_price")
+    private Integer totalPrice;
 
     private Order(final Book book, final User buyer) {
         this.totalPrice = book.getCost();
