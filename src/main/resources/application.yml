@@ -17,6 +17,7 @@ spring:
   sql:
     init:
       mode: always
+      data-locations: classpath:data/data.sql
 
 #  pid:
 #    file: /home/ec2-user/app/step2/monalisa.pid
