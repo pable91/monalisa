@@ -145,8 +145,6 @@ class UserApiTest {
                 ),
                 responseFields(
                     fieldWithPath("userName").description("사용자 이름").type(JsonFieldType.STRING),
-                    fieldWithPath("registerBookList").description("등록한 책 리스트")
-                        .type(JsonFieldType.ARRAY),
                     fieldWithPath("accessToken").description("엑세스 토큰").type(JsonFieldType.STRING),
                     fieldWithPath("refreshToken").description("리프레시 토큰").type(JsonFieldType.STRING)
                 ),
