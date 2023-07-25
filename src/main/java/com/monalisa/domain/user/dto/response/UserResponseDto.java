@@ -59,9 +59,6 @@ public class UserResponseDto {
     @Getter
     public static class Login {
         private String userName;
-
-        private List<BookResponseDto> registerBookList;
-
         private String accessToken;
         private String refreshToken;
 
@@ -69,9 +66,6 @@ public class UserResponseDto {
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
             this.userName = user.getName();
-            this.registerBookList = user.getRegisterBooks().stream()
-                    .map(book -> BookResponseDto.of(book))
-                    .collect(Collectors.toList());
         }
 
         public static Login from(String accessToken, String refreshToken, User user) {
