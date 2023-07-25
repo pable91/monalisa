@@ -7,7 +7,6 @@ import com.monalisa.domain.user.domain.Role;
 import com.monalisa.domain.user.domain.User;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,14 +38,14 @@ public class UserResponseDto {
         private String name;
         private String email;
         private Role role;
-        private List<BookResponseDto> registerBookList;
+        private List<BookResponseDto> myRegisterBooks;
 
         public Profile(User user) {
             this.userName = user.getName();
             this.name = user.getName();
             this.email = user.getEmail();
             this.role = user.getRole();
-            this.registerBookList = user.getRegisterBooks().stream()
+            this.myRegisterBooks = user.getMyRegisterBooks().stream()
                     .map(book -> BookResponseDto.of(book))
                     .collect(Collectors.toList());
         }

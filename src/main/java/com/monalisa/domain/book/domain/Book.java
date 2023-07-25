@@ -55,7 +55,7 @@ public class Book {
         this.likes = 0;
 
         if (user != null) {
-            user.getRegisterBooks().add(this);
+            user.getMyRegisterBooks().add(this);
         }
     }
 
